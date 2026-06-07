@@ -9,7 +9,7 @@ import ssl
 import time
 import json
 
-DOWNLOAD_DIR = r"d:\L3-Academy\NCTU-Zack\flow-3d-papers-docs\downloads"
+DOWNLOAD_DIR = r"d:\L3-Academy\OpenFlow3D\flow-3d-papers-docs\downloads"
 MANIFEST_PATH = os.path.join(DOWNLOAD_DIR, "download_manifest_20260607_v01.json")
 
 # Top 30 papers to download - all open access (arXiv, PMC, NASA, etc.)

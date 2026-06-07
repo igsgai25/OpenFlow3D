@@ -850,7 +850,7 @@ def generate_catalog():
 
 ---
 
-*Catalog generated 2026-06-07 by AEOS Director Sigma v9.1 (AEGIS Edition) for NCTU-Zack Flow-3D Research Project.*
+*Catalog generated 2026-06-07 by AEOS Director Sigma v9.1 (AEGIS Edition) for OpenFlow3D Flow-3D Research Project.*
 *Total entries: ~1000 (890 individually listed + 110 grouped in 4 expansion blocks)*
 *Confidence: 78% [VERIFIED], 17% [INFERRED], 5% [EST]*
 """)
