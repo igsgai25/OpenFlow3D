@@ -1,6 +1,6 @@
 # 📚 Report 15: The Moldex3D Killer — Open-Source Python & Web-CAE Blueprint [VERIFIED]
 > **文件編號**: `igs_moldex3d_killer_web_cae_blueprint_20260607_v01.md`  
-> **專案代號**: `L3-Zack` | **領域**: `igs` (工業模擬) / `chu` (教學與實驗) | **等級**: 專家級 (Chief Technology Officer & CAE Founder)
+> **專案代號**: `L3-OpenFlow3D` | **領域**: `igs` (工業模擬) / `chu` (教學與實驗) | **等級**: 專家級 (Chief Technology Officer & CAE Founder)
 
 本報告勾勒出一個具有破局意義的「Moldex3D Killer」開源、Web化、Python驅動之三維模流分析與數位分身系統 —— **OpenFlow3D** 的架構設計藍圖。報告內含 100 大領域關鍵字對照表與系統實作規劃。
 

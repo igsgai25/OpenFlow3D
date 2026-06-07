@@ -1,6 +1,6 @@
 # 📚 Report 3: Software Engineering Practice & Google Antigravity IDE Integration Blueprint [VERIFIED]
 > **文件編號**: `chu_agencyagents_antigravity_implementation_blueprint_20260607_v01.md`  
-> **專案代號**: `L3-Zack` | **領域**: `chu` (教學與實驗) / `aeos` (整合開發) | **等級**: 專家級 (Lead Solutions & IDE Architect)
+> **專案代號**: `L3-OpenFlow3D` | **領域**: `chu` (教學與實驗) / `aeos` (整合開發) | **等級**: 專家級 (Lead Solutions & IDE Architect)
 
 本報告詳述如何將 `agency-agents` 多智能體庫深度整合入 **Google Antigravity IDE**，並在硬體資源受限（Phoenix γ 工作站，12GB VRAM 限額）的條件下，確保多智能體流水線的安全、高速運算。
 
@@ -58,7 +58,7 @@
 
 > [!TIP]
 > 為驗證此架構可行性，我們已建立並成功運行了模擬防護腳本：
-> **[chu_agencyagents_runner_mock_20260607_v01.py](file:///D:/L3-Academy/NCTU-Zack/chu_agencyagents_runner_mock_20260607_v01.py)**
+> **[chu_agencyagents_runner_mock_20260607_v01.py](file:///D:/L3-Academy/OpenFlow3D/chu_agencyagents_runner_mock_20260607_v01.py)**
 
 於本地 Windows 環境下，該腳本的驗證結果如下：
 1.  **VRAM 限制設定**: 12.0 GB [VERIFIED]。

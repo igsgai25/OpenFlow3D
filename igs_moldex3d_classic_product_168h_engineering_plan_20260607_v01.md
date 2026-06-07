@@ -1,6 +1,6 @@
 # 📚 Report 10: Moldex3D iMolding Calibrator 168-Hour Project Engineering Plan [VERIFIED]
 > **文件編號**: `igs_moldex3d_classic_product_168h_engineering_plan_20260607_v01.md`  
-> **專案代號**: `L3-Zack` | **領域**: `igs` (工業模擬) / `aeos` (專案工程) | **等級**: 專家級 (Director of Engineering & PMO Lead)
+> **專案代號**: `L3-OpenFlow3D` | **領域**: `igs` (工業模擬) / `aeos` (專案工程) | **等級**: 專家級 (Director of Engineering & PMO Lead)
 
 本專案工程計劃為在 168 小時（以目標為導向的長週期任務）內，利用 Google Antigravity IDE 協同建立 **Moldex3D iMolding (機台特徵化與壓力曲線校準引擎)** 的工程實現規劃。
 
@@ -10,7 +10,7 @@
 
 ### 🏁 階段一：環境建置、SSOT 宣告與系統設計 (Hour 1 - 24)
 *   **目標**: 完成工作區物理隔離、環境依賴安裝與底層架構設計。
-    *   **Hour 1 - 4**: 於 Google Antigravity IDE 中建立專案目錄 `D:/L3-Academy/NCTU-Zack`，編寫基礎 [GEMINI.md](file:///D:/L3-Academy/NCTU-Zack/GEMINI.md) 確定單一事實來源 [VERIFIED]。
+    *   **Hour 1 - 4**: 於 Google Antigravity IDE 中建立專案目錄 `D:/L3-Academy/OpenFlow3D`，編寫基礎 [GEMINI.md](file:///D:/L3-Academy/OpenFlow3D/GEMINI.md) 確定單一事實來源 [VERIFIED]。
     *   **Hour 5 - 12**: 配置 Python 3.10 虛擬環境，安裝科學計算依賴（NumPy, SciPy, Pandas, paho-mqtt）並進行環境性能基準測試。
     *   **Hour 13 - 24**: 撰寫詳細的軟體需求說明書與數據流管道規格（包含 OPC UA 資料交換欄位定義格式）。
     *   **🛡️ 品質門禁 (Quality Gate 1)**: 執行 Antigravity 安全稽核，確認專案目錄內無衝突的全量 AST 掃描威脅，確保 `Topological Pruner` 配置生效。

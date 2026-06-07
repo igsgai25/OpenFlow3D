@@ -1,6 +1,6 @@
 # 📚 Report 2: Core CAE Simulation Solver Physics & Tech [VERIFIED]
 > **文件編號**: `igs_moldex3d_core_simulation_solver_report_20260607_v01.md`  
-> **專案代號**: `L3-Zack` | **領域**: `igs` (工業模擬) | **等級**: 專家級 (Physics & Numerical Solver Specialist)
+> **專案代號**: `L3-OpenFlow3D` | **領域**: `igs` (工業模擬) | **等級**: 專家級 (Physics & Numerical Solver Specialist)
 
 本報告將從偏微分方程 (PDE) 求解、高分子流變學以及離散數值方法的角度，深入剖析 Moldex3D 三維模流求解器的核心物理與數值計算技術。
 

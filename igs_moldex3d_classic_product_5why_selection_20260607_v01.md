@@ -1,8 +1,8 @@
 # 📚 Report 6: Classic Product Choice & 5-Why Selection Analysis [VERIFIED]
 > **文件編號**: `igs_moldex3d_classic_product_5why_selection_20260607_v01.md`  
-> **專案代號**: `L3-Zack` | **領域**: `igs` (工業模擬) / `chu` (教學與實驗) | **等級**: 專家級 (Strategic Product & Domain Architect)
+> **專案代號**: `L3-OpenFlow3D` | **領域**: `igs` (工業模擬) / `chu` (教學與實驗) | **等級**: 專家級 (Strategic Product & Domain Architect)
 
-本報告詳細記錄了為 NCTU-Zack 學習工作區所選定的「經典模擬實踐產品」—— **Moldex3D iMolding (機台特徵化與壓力曲線校準引擎)**，並透過 5-Why 分析法論證其作為學習載體的可行性與重大商業工程價值。
+本報告詳細記錄了為 OpenFlow3D 學習工作區所選定的「經典模擬實踐產品」—— **Moldex3D iMolding (機台特徵化與壓力曲線校準引擎)**，並透過 5-Why 分析法論證其作為學習載體的可行性與重大商業工程價值。
 
 ---
 

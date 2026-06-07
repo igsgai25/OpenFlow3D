@@ -1,6 +1,6 @@
 # 📚 Report 3: Moldex3D 3-Layers 5W1H Strategic Analysis [VERIFIED]
 > **文件編號**: `igs_moldex3d_three_layers_5w1h_analysis_20260607_v01.md`  
-> **專案代號**: `L3-Zack` | **領域**: `igs` (工業模擬) / `chu` (教學與實驗) | **等級**: 專家級 (Strategic Business & Technical Analyst)
+> **專案代號**: `L3-OpenFlow3D` | **領域**: `igs` (工業模擬) / `chu` (教學與實驗) | **等級**: 專家級 (Strategic Business & Technical Analyst)
 
 本分析報告將 Moldex3D 模流分析與數位分身的核心生態系統拆解為三個核心層次（商業與產業維度、工程與產品維度、學術與學習維度），進行深度 5W1H（Who, What, Where, When, Why, How）立體化剖析。
 
@@ -46,17 +46,17 @@
 
 ## 🎓 第三層：學術與學習維度 (Layer 3: Academic & Pedagogical Dimension)
 
-本維度定義在 NCTU-Zack 工作區下，學生與研究人員如何高效學習與掌握模流物理與數位分身的核心知識。
+本維度定義在 OpenFlow3D 工作區下，學生與研究人員如何高效學習與掌握模流物理與數位分身的核心知識。
 
 *   **Who (教學與學習者)**:
     *   陽明交通大學 (NYCU/NCTU) 學生、產學合作研究員、導師 (Dr. Horace Chen) 以及 AI 協同學習助手 [VERIFIED]。
 *   **What (知識傳遞內容)**:
     *   高分子流變學理論、有限體積法 (FVM) 數值離散、感測器物理對齊演算法、以及基於 AI 代理人 (Surrogate Model) 的機器學習優化實驗 [VERIFIED]。
 *   **Where (學習場域)**:
-    *   L3-Academy 下的 NCTU-Zack 虛擬工作區、Jupyter Notebook 實驗環境 [VERIFIED]。
+    *   L3-Academy 下的 OpenFlow3D 虛擬工作區、Jupyter Notebook 實驗環境 [VERIFIED]。
 *   **When (學術週期安排)**:
     *   對照 18 週 CHU Pedagogy 標準學程，自 Week 01 基礎物理起跑，至 Week 18 進行專案發表與良率模型評估 [INFERRED]。
 *   **Why (學術研究價值)**:
     *   訓練學生從「黑盒子軟體操作員 (Button Pusher)」蛻變為「能建置虛實整合演算法、改寫材料本構方程與開發 AI 良率代理模型」的高階數位製造工程師 [INFERRED]。
 *   **How (學習與評量機制)**:
-    *   理論講授結合 PBL (Problem-Based Learning) 程式實作，透過 [chu_digitaltwin_curve_aligner_lab_20260607_v01.py](file:///D:/L3-Academy/NCTU-Zack/chu_digitaltwin_curve_aligner_lab_20260607_v01.py) 等互動腳本，讓學生親手調校模擬參數誤差，進行 A/B 測試與效能度量 [VERIFIED]。
+    *   理論講授結合 PBL (Problem-Based Learning) 程式實作，透過 [chu_digitaltwin_curve_aligner_lab_20260607_v01.py](file:///D:/L3-Academy/OpenFlow3D/chu_digitaltwin_curve_aligner_lab_20260607_v01.py) 等互動腳本，讓學生親手調校模擬參數誤差，進行 A/B 測試與效能度量 [VERIFIED]。

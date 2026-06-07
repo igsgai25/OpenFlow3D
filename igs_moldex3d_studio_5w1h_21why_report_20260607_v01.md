@@ -1,6 +1,6 @@
 # 📚 Report 14: Moldex3D Studio 3-Layer 5W1H & 21-Why Technical Report [VERIFIED]
 > **文件編號**: `igs_moldex3d_studio_5w1h_21why_report_20260607_v01.md`  
-> **專案代號**: `L3-Zack` | **領域**: `igs` (工業模擬) | **等級**: 專家級 (Senior Software & CAE Architect)
+> **專案代號**: `L3-OpenFlow3D` | **領域**: `igs` (工業模擬) | **等級**: 專家級 (Senior Software & CAE Architect)
 
 本技術報告針對 Moldex3D 旗艦桌面端產品 **Moldex3D Studio** 的軟體架構、前處理網格生成引擎與三維可視化渲染核心進行 3 層 5W1H 深度剖析，並提供 21-Why 的底層架構技術問答。
 

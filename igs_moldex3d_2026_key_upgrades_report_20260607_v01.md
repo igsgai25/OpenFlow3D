@@ -1,6 +1,6 @@
 # 📚 Report 11: Moldex3D 2026 Key Upgrades & Technical Evolution Report [VERIFIED]
 > **文件編號**: `igs_moldex3d_2026_key_upgrades_report_20260607_v01.md`  
-> **專案代號**: `L3-Zack` | **領域**: `igs` (工業模擬) | **等級**: 專家級 (Lead CAE Solver & Product Specialist)
+> **專案代號**: `L3-OpenFlow3D` | **領域**: `igs` (工業模擬) | **等級**: 專家級 (Lead CAE Solver & Product Specialist)
 
 本報告針對 Moldex3D 2026 新世代版本（基於自動化 Automation、設計優化 Optimization、智能化 Intelligence 主軸）進行核心技術升級評估，剖析其在**數位分身 (Digital Twin)**、**易用性 (Accessibility)** 與 **iMolding 智造生態系** 的重大工程演進。
 

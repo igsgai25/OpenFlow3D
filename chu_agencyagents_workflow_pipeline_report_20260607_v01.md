@@ -1,6 +1,6 @@
 # 📚 Report 2: Workflow Engineering & Execution Pipeline Design [VERIFIED]
 > **文件編號**: `chu_agencyagents_workflow_pipeline_report_20260607_v01.md`  
-> **專案代號**: `L3-Zack` | **領域**: `chu` (教學與實驗) | **等級**: 專家級 (Senior workflow & Process Engineer)
+> **專案代號**: `L3-OpenFlow3D` | **領域**: `chu` (教學與實驗) | **等級**: 專家級 (Senior workflow & Process Engineer)
 
 本報告對 `agency-agents` 的 60 個 Workflows、60 個 Skills 與 60 個 Playbooks 進行結構化分類，並提供一個標準的多智能體 Pipeline 執行管道設計藍圖。
 

@@ -1,6 +1,6 @@
 # 📚 Report 9: Google Antigravity IDE Integration Guide for iMolding Calibrator [VERIFIED]
 > **文件編號**: `igs_moldex3d_google_antigravity_ide_integration_guide_20260607_v01.md`  
-> **專案代號**: `L3-Zack` | **領域**: `igs` (工業模擬) / `aeos` (整合開發) | **等級**: 專家級 (Lead IDE Engineer & DevOps Architect)
+> **專案代號**: `L3-OpenFlow3D` | **領域**: `igs` (工業模擬) / `aeos` (整合開發) | **等級**: 專家級 (Lead IDE Engineer & DevOps Architect)
 
 本整合指南詳細指導開發團隊如何利用 **Google Antigravity IDE (v9.1 AEGIS Edition)** 的三大核心引擎（Chronos 監控、拓樸修剪、ZTPP 爆炸半徑守門員），高效且無記憶體溢出地在本地 Phoenix γ 工作站上開發與整合 Moldex3D iMolding 校準引擎。
 
@@ -55,7 +55,7 @@ gantt
     現場測試與 Jupyter Lab 編譯     :after des4, des5, 24
 ```
 
-*   **階段一 (Hour 0 - 24)**: 建立物理目錄隔離，編寫工作區 [GEMINI.md](file:///D:/L3-Academy/NCTU-Zack/GEMINI.md)，設定預載專家，建置 Python 虛擬環境。
+*   **階段一 (Hour 0 - 24)**: 建立物理目錄隔離，編寫工作區 [GEMINI.md](file:///D:/L3-Academy/OpenFlow3D/GEMINI.md)，設定預載專家，建置 Python 虛擬環境。
 *   **階段二 (Hour 25 - 72)**: 實作 `chu_digitaltwin_curve_aligner_lab_20260607_v01.py` 的基礎數據採集與 S-G 降噪濾波管道。
 *   **階段三 (Hour 73 - 120)**: 編寫 DTW 對齊演算法，開發與 Moldex3D 求解器的輸入檔代換介面。
 *   **階段四 (Hour 121 - 144)**: 整合非線性 LM 優化演算法，實現 Cross-WLF 模型黏度參數的反向自動修正與 PLC Recipe 封裝。

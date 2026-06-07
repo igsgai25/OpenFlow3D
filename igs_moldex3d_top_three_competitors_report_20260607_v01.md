@@ -1,6 +1,6 @@
 # 📚 Report 12: Moldex3D Top 3 Competitors Super Investigation Report [VERIFIED]
 > **文件編號**: `igs_moldex3d_top_three_competitors_report_20260607_v01.md`  
-> **專案代號**: `L3-Zack` | **領域**: `igs` (工業模擬) | **等級**: 專家級 (Strategic Market & CAE Analyst)
+> **專案代號**: `L3-OpenFlow3D` | **領域**: `igs` (工業模擬) | **等級**: 專家級 (Strategic Market & CAE Analyst)
 
 本研究報告針對全球塑料射出成型 CAE 模擬領域的競爭格局進行深度調查，篩選出 Moldex3D 的三大核心競爭對手（Autodesk Moldflow、SIGMASOFT Virtual Molding、CADMOULD 3D-F），進行多維度對比與先進 SWOT 戰略分析。
 

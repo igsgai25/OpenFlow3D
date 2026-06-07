@@ -1,6 +1,6 @@
 # 📚 Report 1: Multi-Agent Collaboration Framework & Architectural Taxonomy [VERIFIED]
 > **文件編號**: `chu_agencyagents_architecture_taxonomy_report_20260607_v01.md`  
-> **專案代號**: `L3-Zack` | **領域**: `chu` (教學與實驗) | **等級**: 專家級 (AI System Architect Level)
+> **專案代號**: `L3-OpenFlow3D` | **領域**: `chu` (教學與實驗) | **等級**: 專家級 (AI System Architect Level)
 
 本報告針對開源多智能體（Multi-Agent）庫 `agency-agents` 的架構進行深度剖析，對 218 個 Agent 進行分類學（Taxonomy）梳理，並與當前主流開源多智能體框架進行對比。
 

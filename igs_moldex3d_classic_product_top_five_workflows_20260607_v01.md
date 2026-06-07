@@ -1,6 +1,6 @@
 # 📚 Report 7: Classic Product Top 5 Workflows & Data Pipelines [VERIFIED]
 > **文件編號**: `igs_moldex3d_classic_product_top_five_workflows_20260607_v01.md`  
-> **專案代號**: `L3-Zack` | **領域**: `igs` (工業模擬) | **等級**: 專家級 (Senior Data Engineer & Solutions Architect)
+> **專案代號**: `L3-OpenFlow3D` | **領域**: `igs` (工業模擬) | **等級**: 專家級 (Senior Data Engineer & Solutions Architect)
 
 本報告詳細定義了 **Moldex3D iMolding (機台特徵化與壓力曲線校準引擎)** 的 5 個核心數據工作流與演算法管線。
 

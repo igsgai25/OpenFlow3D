@@ -1,13 +1,13 @@
 # 🎓 Moldex3D 模流分析與數位分身專題學習指南 🧪
-> **專案代號**: `L3-Zack` | **領域**: `chu` (教學與實驗) | **SSOT 參照**: [GEMINI.md](file:///D:/L3-Academy/NCTU-Zack/GEMINI.md)
+> **專案代號**: `L3-OpenFlow3D` | **領域**: `chu` (教學與實驗) | **SSOT 參照**: [GEMINI.md](file:///D:/L3-Academy/OpenFlow3D/GEMINI.md)
 
-本指南旨在系統化整理並學習科盛科技 (Moldex3D) 專家 Zack 所分享的關鍵技術主題，聚焦於**塑膠射出成型模擬物理**、**工業數位分身 (Digital Twin) 虛實整合**以及**人工智慧 (AI) 參數優化**。
+本指南旨在系統化整理並學習科盛科技 (Moldex3D) 專家 an industry expert 所分享的關鍵技術主題，聚焦於**塑膠射出成型模擬物理**、**工業數位分身 (Digital Twin) 虛實整合**以及**人工智慧 (AI) 參數優化**。
 
 ---
 
 ## 🗺️ 1. 學習路徑地圖 (Learning Roadmap)
 
-我們將 Zack 分享的關鍵主題劃分為四大核心學習階段，從底層物理模擬逐步邁向智慧製造的前沿應用：
+我們將 an industry expert 分享的關鍵主題劃分為四大核心學習階段，從底層物理模擬逐步邁向智慧製造的前沿應用：
 
 ```mermaid
 graph TD
@@ -86,7 +86,7 @@ graph LR
 
 ## 🔬 3. PBL 實作實驗設計提案 (Problem-Based Learning Labs)
 
-為了深化對 Zack 分享內容的理解，以下設計了兩個 PBL 實驗，供後續在 `Labs/` 目錄中實作：
+為了深化對 an industry expert 分享內容的理解，以下設計了兩個 PBL 實驗，供後續在 `Labs/` 目錄中實作：
 
 | 實驗編號 | 實驗名稱 | 學習目標 | 核心任務 |
 |---|---|---|---|
@@ -97,4 +97,4 @@ graph LR
 
 ## 📊 4. 參考資源與工具 binding
 *   **學術文獻與教材**: 存放於 [D:/L3-Academy/Courses/](file:///D:/L3-Academy/Courses/)
-*   **分析腳本**: 未來編寫的自動化處理 Python 腳本將以 `F.I.L.E.S. v1.0` 命名存入 `D:/L3-Academy/NCTU-Zack/`。
+*   **分析腳本**: 未來編寫的自動化處理 Python 腳本將以 `F.I.L.E.S. v1.0` 命名存入 `D:/L3-Academy/OpenFlow3D/`。

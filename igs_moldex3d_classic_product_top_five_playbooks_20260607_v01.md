@@ -1,6 +1,6 @@
 # 📚 Report 8: Moldex3D iMolding Top 5 Playbooks (SOP) [VERIFIED]
 > **文件編號**: `igs_moldex3d_classic_product_top_five_playbooks_20260607_v01.md`  
-> **專案代號**: `L3-Zack` | **領域**: `igs` (工業模擬) | **等級**: 專家級 (Operations & Quality Assurance Director)
+> **專案代號**: `L3-OpenFlow3D` | **領域**: `igs` (工業模擬) | **等級**: 專家級 (Operations & Quality Assurance Director)
 
 本報告為 **Moldex3D iMolding (機台特徵化與壓力曲線校準引擎)** 提供 5 套在工業現場與研發端運行的標準作業劇本 (Standard Operating Playbooks, SOP)。
 
@@ -25,7 +25,7 @@
 *   **執行步驟**:
     1.  **感測器自檢**: 確認模穴內壓力與溫度感測器接線正確，信號放大器輸出零點校準。
     2.  **基準參數射出**: 使用 Moldex3D 推薦的初始工藝設定（速度、保壓、模溫）射出 5 模，丟棄前 2 模不穩定件，採集後 3 模的模穴壓力時間序列。
-    3.  **觸發 iMolding 校準**: 將數據匯入 [chu_digitaltwin_curve_aligner_lab_20260607_v01.py](file:///D:/L3-Academy/NCTU-Zack/chu_digitaltwin_curve_aligner_lab_20260607_v01.py) 運算。
+    3.  **觸發 iMolding 校準**: 將數據匯入 [chu_digitaltwin_curve_aligner_lab_20260607_v01.py](file:///D:/L3-Academy/OpenFlow3D/chu_digitaltwin_curve_aligner_lab_20260607_v01.py) 運算。
     4.  **品質門檻門禁 (Quality Gate)**: 比對對齊後的 RMSE 誤差。
         *   若 $\text{RMSE} \le 5\text{ MPa}$，則通過驗證，鎖定數位分身模型 [VERIFIED]；
         *   若 $\text{RMSE} > 5\text{ MPa}$，則自動修正 Cross-WLF 材料參數與介面傳熱係數 (HTC)，重新計算直到達標。

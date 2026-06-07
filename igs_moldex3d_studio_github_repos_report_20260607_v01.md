@@ -1,6 +1,6 @@
 # 📚 Report 13: Moldex3D Studio GitHub Open Source Research Report [VERIFIED]
 > **文件編號**: `igs_moldex3d_studio_github_repos_report_20260607_v01.md`  
-> **專案代號**: `L3-Zack` | **領域**: `igs` (工業模擬) | **等級**: 專家級 (Open-Source CAE Researcher)
+> **專案代號**: `L3-OpenFlow3D` | **領域**: `igs` (工業模擬) | **等級**: 專家級 (Open-Source CAE Researcher)
 
 本報告對全球與塑膠射出成型模擬、三維有限元素網格生成、以及科學可視化相關的 Top 5 開源 GitHub 倉庫進行深度評析與技術架構探索，為打造自主產權之模流分析軟體奠定技術庫備份與代碼研讀基礎。
 
@@ -46,8 +46,8 @@
 
 ```bash
 # 建立專案第三方依賴目錄
-mkdir -p D:/L3-Academy/NCTU-Zack/3rdparty
-cd D:/L3-Academy/NCTU-Zack/3rdparty
+mkdir -p D:/L3-Academy/OpenFlow3D/3rdparty
+cd D:/L3-Academy/OpenFlow3D/3rdparty
 
 # 1. 克隆核心流動求解器 openInjMoldSim
 git clone --depth 1 https://github.com/krebeljk/openInjMoldSim.git

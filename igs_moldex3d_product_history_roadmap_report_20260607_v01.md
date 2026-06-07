@@ -1,6 +1,6 @@
 # 📚 Report 1: Moldex3D Product History & Strategic Roadmap Analysis [VERIFIED]
 > **文件編號**: `igs_moldex3d_product_history_roadmap_report_20260607_v01.md`  
-> **專案代號**: `L3-Zack` | **領域**: `igs` (工業模擬) | **等級**: 專家級 (PhD / Software Architect Level)
+> **專案代號**: `L3-OpenFlow3D` | **領域**: `igs` (工業模擬) | **等級**: 專家級 (PhD / Software Architect Level)
 
 本報告從軟體工程與產品生命週期管理 (PLM) 的視角，深度剖析科盛科技 (Moldex3D) 自 1983 年學術萌芽期至 2026 年智慧製造時代的產品歷史演進與未來戰略技術路線圖。
 

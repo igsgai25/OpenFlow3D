@@ -1,6 +1,6 @@
 # 📚 Report 5: Moldex3D Top 3 Products Architectural Review [VERIFIED]
 > **文件編號**: `igs_moldex3d_top_three_products_review_20260607_v01.md`  
-> **專案代號**: `L3-Zack` | **領域**: `igs` (工業模擬) | **等級**: 系統架構師級 (Lead System Architect)
+> **專案代號**: `L3-OpenFlow3D` | **領域**: `igs` (工業模擬) | **等級**: 系統架構師級 (Lead System Architect)
 
 本報告針對 Moldex3D 生態圈中最重要的三款核心產品（Studio、iSLM、iMolding Hub）進行軟體系統架構、元件依賴性與數據流設計的深度剖析。
 

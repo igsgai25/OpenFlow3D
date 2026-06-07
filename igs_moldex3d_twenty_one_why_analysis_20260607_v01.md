@@ -1,6 +1,6 @@
 # 📚 Report 4: Moldex3D Domain & Technology 21-Why Deep Root-Cause Analysis [VERIFIED]
 > **文件編號**: `igs_moldex3d_twenty_one_why_analysis_20260607_v01.md`  
-> **專案代號**: `L3-Zack` | **領域**: `igs` (工業模擬) | **等級**: 專家級 (Domain Expert & Deep Thinker)
+> **專案代號**: `L3-OpenFlow3D` | **領域**: `igs` (工業模擬) | **等級**: 專家級 (Domain Expert & Deep Thinker)
 
 本報告藉由連續的 21 個深度追問與邏輯解答，層層剖析高分子射出成型模擬、數位分身與 AI 技術融合的最底層原理與工程核心痛點。
 

@@ -73,7 +73,7 @@ Then navigate to `http://localhost:8000/igs_openflow3d_interactive_dashboard_202
 ## 📁 Project Structure
 
 ```
-NCTU-Zack/
+OpenFlow3D/
 ├── igs_openflow3d_interactive_dashboard_20260607_v03.html  ← 🌟 Main Dashboard (V3)
 ├── igs_openflow3d_interactive_dashboard_20260607_v02.html  ← V2 (Three.js upgrade)
 ├── igs_openflow3d_interactive_dashboard_20260607_v01.html  ← V1 (Canvas 2D original)
