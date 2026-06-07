@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenFlow3D — 3D Web-CAE Educational Dashboard v3.0</title>
+    <meta name="description" content="OpenFlow3D v3.0 次世代教育版 3D 互動式模流分析儀表板。搭載 12 階段完整射出成型工作流、即時物理公式面板、PBL 知識卡與 Three.js WebGL 3D 引擎。">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+    <style>
+        /* ═══════════════════════════════════════════════════════════
+           OpenFlow3D Dashboard v3.0 — Educational Edition
+           Theme: Nebula Academy (星雲學院)
+           ═══════════════════════════════════════════════════════════ */
+        :root {
+            --bg-deep: #05080f;
+            --bg-card: rgba(12, 18, 35, 0.8);
+            --bg-glass: rgba(14, 22, 44, 0.6);
+            --primary: #3b82f6;
+            --primary-glow: rgba(59, 130, 246, 0.3);
+            --accent: #06d6a0;
+            --accent-glow: rgba(6, 214, 160, 0.2);
+            --purple: #8b5cf6;
+            --purple-glow: rgba(139, 92, 246, 0.2);
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --cyan: #22d3ee;
+            --text-main: #e8edf5;
+            --text-muted: #7b8aa8;
+            --text-dim: #4a5570;
+            --border: rgba(255, 255, 255, 0.06);
+            --border-hover: rgba(59, 130, 246, 0.25);
+            --font-main: 'Inter', system-ui, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --radius-sm: 6px; --radius-md: 10px; --radius-lg: 14px;
+            --transition: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; overflow: hidden; background: var(--bg-deep); color: var(--text-main); font-family: var(--font-main); }
+
+        body::before {
+            content: ''; position: fixed; inset: 0; z-index: 0;
+            background: radial-gradient(ellipse 80% 60% at 15% 20%, rgba(59,130,246,0.06), transparent),
+                        radial-gradient(ellipse 60% 50% at 85% 75%, rgba(6,214,160,0.04), transparent),
+                        radial-gradient(ellipse 40% 40% at 50% 50%, rgba(139,92,246,0.03), transparent);
+            animation: bgPulse 14s ease-in-out infinite alternate;
+        }
+        @keyframes bgPulse { 0% { opacity: 0.6; } 100% { opacity: 1; } }
+
+        /* ─── Header ─────────────────────────────── */
+        header {
+            position: relative; z-index: 100; height: 48px;
+            padding: 0 1.2rem; display: flex; align-items: center; justify-content: space-between;
+            background: rgba(6, 10, 20, 0.9); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+        .logo-area { display: flex; align-items: center; gap: 0.6rem; }
+        .logo-icon {
+            width: 30px; height: 30px; background: linear-gradient(135deg, #3b82f6, #06d6a0);
+            border-radius: 7px; display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 0.9rem; color: white;
+            box-shadow: 0 0 16px rgba(59,130,246,0.35); animation: logoFloat 4s ease-in-out infinite;
+        }
+        @keyframes logoFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-1.5px); } }
+        .logo-text h1 { font-size: 0.92rem; font-weight: 700; letter-spacing: -0.5px; }
+        .logo-text span { font-size: 0.58rem; color: var(--text-muted); font-family: var(--font-mono); }
+        .header-right { display: flex; align-items: center; gap: 0.8rem; }
+        .badge { padding: 0.2rem 0.55rem; border-radius: 99px; font-size: 0.58rem; font-weight: 500; border: 1px solid; display: flex; align-items: center; gap: 0.3rem; }
+        .badge-green { background: rgba(6,214,160,0.08); color: var(--accent); border-color: rgba(6,214,160,0.15); }
+        .badge-purple { background: rgba(139,92,246,0.08); color: var(--purple); border-color: rgba(139,92,246,0.15); cursor: pointer; }
+        .badge-purple:hover { background: rgba(139,92,246,0.15); }
+        .badge-dim { background: rgba(255,255,255,0.02); color: var(--text-dim); border-color: var(--border); font-family: var(--font-mono); }
+        .dot-pulse { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; box-shadow: 0 0 6px rgba(6,214,160,0.5); }
+        @keyframes pulse { 0%,100% { transform: scale(0.8); opacity: 0.5; } 50% { transform: scale(1.3); opacity: 1; } }
+
+        /* ─── App Layout ─────────────────────────── */
+        .app-layout { position: relative; z-index: 1; display: flex; height: calc(100vh - 48px); }
+
+        /* ─── Left Sidebar (12-Stage Stepper) ───── */
+        .sidebar {
+            width: 260px; min-width: 260px;
+            background: rgba(6, 10, 20, 0.75); backdrop-filter: blur(16px);
+            border-right: 1px solid var(--border);
+            display: flex; flex-direction: column;
+        }
+        .sidebar-head {
+            padding: 0.7rem 0.7rem 0.5rem;
+            font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px;
+            color: var(--text-dim); display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+        .sidebar-head .counter { font-family: var(--font-mono); color: var(--primary); background: rgba(59,130,246,0.08); padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.6rem; }
+        .stepper-scroll {
+            flex: 1; overflow-y: auto; padding: 0.4rem;
+        }
+        .stepper-scroll::-webkit-scrollbar { width: 2px; }
+        .stepper-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.05); border-radius: 99px; }
+        .stepper { display: flex; flex-direction: column; gap: 0.25rem; }
+
+        .step {
+            position: relative; padding: 0.5rem 0.55rem 0.5rem 0.7rem;
+            border-radius: var(--radius-sm); cursor: pointer;
+            transition: all 0.3s var(--transition); border: 1px solid transparent;
+        }
+        .step::before {
+            content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2.5px;
+            border-radius: 0 2px 2px 0; transition: all 0.3s var(--transition);
+        }
+        .step:hover { background: rgba(59,130,246,0.03); }
+        .step.active { background: rgba(59,130,246,0.06); border-color: rgba(59,130,246,0.12); }
+        .step.active::before { background: var(--primary); box-shadow: 0 0 8px var(--primary-glow); }
+        .step.done::before { background: var(--accent); }
+        .step.done .step-title { color: var(--accent); }
+
+        .step-top { display: flex; justify-content: space-between; align-items: center; }
+        .step-title { font-size: 0.7rem; font-weight: 600; line-height: 1.2; }
+        .step-tag {
+            font-family: var(--font-mono); font-size: 0.5rem;
+            background: rgba(255,255,255,0.04); color: var(--text-dim);
+            padding: 0.08rem 0.3rem; border-radius: 3px; white-space: nowrap;
+        }
+        .step.active .step-tag { background: rgba(59,130,246,0.12); color: var(--primary); }
+        .step-sub { font-size: 0.58rem; color: var(--text-dim); line-height: 1.3; margin-top: 0.12rem; }
+        .step.active .step-sub { color: var(--text-muted); }
+
+        /* ─── Sidebar Progress ───────────────────── */
+        .sidebar-foot {
+            padding: 0.6rem 0.6rem; border-top: 1px solid var(--border);
+        }
+        .prog-label { display: flex; justify-content: space-between; font-size: 0.58rem; color: var(--text-dim); margin-bottom: 0.3rem; }
+        .prog-bg { height: 3px; background: rgba(255,255,255,0.03); border-radius: 99px; overflow: hidden; }
+        .prog-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--primary), var(--accent)); border-radius: 99px; transition: width 0.5s var(--transition); }
+
+        /* ─── Content Area ───────────────────────── */
+        .content { flex: 1; display: flex; flex-direction: column; overflow: hidden; padding: 0.6rem; gap: 0.6rem; }
+        .top-grid { flex: 1; display: grid; grid-template-columns: 1fr 320px; gap: 0.6rem; min-height: 0; }
+        .bottom-bar { height: 125px; min-height: 125px; }
+
+        /* ─── Panel ──────────────────────────────── */
+        .panel {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: var(--radius-lg); backdrop-filter: blur(14px);
+            display: flex; flex-direction: column; overflow: hidden;
+            transition: border-color 0.3s var(--transition);
+            box-shadow: 0 0 24px rgba(0,0,0,0.15);
+        }
+        .panel:hover { border-color: var(--border-hover); }
+        .p-head {
+            padding: 0.55rem 0.8rem; display: flex; align-items: center; justify-content: space-between;
+            border-bottom: 1px solid var(--border); background: rgba(255,255,255,0.008);
+        }
+        .p-title { font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; gap: 0.35rem; }
+        .p-badge { font-family: var(--font-mono); font-size: 0.55rem; color: var(--primary); background: rgba(59,130,246,0.07); padding: 0.12rem 0.45rem; border-radius: 3px; }
+        .p-body { flex: 1; position: relative; overflow: hidden; }
+
+        /* ─── 3D Viewport ────────────────────────── */
+        .vp-container { flex: 1; display: flex; flex-direction: column; }
+        .vp-body { flex: 1; background: radial-gradient(ellipse at center, #0a0f1e, #050810); position: relative; }
+        #three-viewport { width: 100%; height: 100%; display: block; }
+        .vp-overlay { position: absolute; top: 0.5rem; right: 0.5rem; display: flex; flex-direction: column; gap: 0.3rem; z-index: 10; }
+        .vp-chip {
+            background: rgba(6,10,20,0.8); backdrop-filter: blur(10px);
+            border: 1px solid var(--border); border-radius: var(--radius-sm);
+            padding: 0.25rem 0.5rem; font-size: 0.55rem; font-family: var(--font-mono);
+            color: var(--text-muted); display: flex; align-items: center; gap: 0.25rem;
+        }
+        .vp-chip .d { width: 4px; height: 4px; border-radius: 50%; background: var(--primary); box-shadow: 0 0 5px var(--primary-glow); }
+
+        .stats-row {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.4rem;
+            padding: 0.45rem 0.6rem; border-top: 1px solid var(--border); background: rgba(255,255,255,0.008);
+        }
+        .stat { text-align: center; }
+        .stat-l { font-size: 0.5rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.3px; }
+        .stat-v { font-size: 0.82rem; font-weight: 700; font-family: var(--font-mono); color: var(--primary); margin-top: 0.05rem; }
+
+        .task-prog { padding: 0.4rem 0.7rem; border-top: 1px solid var(--border); display: none; }
+        .task-prog.show { display: block; }
+        .tp-label { display: flex; justify-content: space-between; font-size: 0.55rem; font-family: var(--font-mono); color: var(--text-muted); margin-bottom: 0.2rem; }
+        .tp-bg { height: 3px; background: rgba(255,255,255,0.03); border-radius: 99px; overflow: hidden; }
+        .tp-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--primary), var(--accent)); border-radius: 99px; transition: width 0.12s linear; }
+
+        /* ─── Right Stack ────────────────────────── */
+        .right-stack { display: flex; flex-direction: column; gap: 0.6rem; overflow: hidden; }
+
+        /* ═══ FEATURE 1: Knowledge Cards ═══ */
+        .knowledge-card {
+            background: linear-gradient(135deg, rgba(139,92,246,0.06), rgba(59,130,246,0.04));
+            border: 1px solid rgba(139,92,246,0.12);
+            border-radius: var(--radius-md); overflow: hidden;
+            transition: all 0.4s var(--transition);
+        }
+        .kc-header {
+            padding: 0.5rem 0.7rem; display: flex; align-items: center; justify-content: space-between;
+            cursor: pointer; user-select: none;
+        }
+        .kc-header:hover { background: rgba(139,92,246,0.04); }
+        .kc-title { font-size: 0.7rem; font-weight: 600; display: flex; align-items: center; gap: 0.3rem; }
+        .kc-bloom {
+            font-size: 0.48rem; font-family: var(--font-mono);
+            padding: 0.08rem 0.35rem; border-radius: 3px;
+            background: rgba(139,92,246,0.12); color: var(--purple);
+        }
+        .kc-toggle { font-size: 0.7rem; color: var(--text-dim); transition: transform 0.3s; }
+        .kc-body {
+            max-height: 0; overflow: hidden; transition: max-height 0.5s var(--transition), padding 0.3s;
+            padding: 0 0.7rem;
+        }
+        .kc-body.open { max-height: 300px; padding: 0 0.7rem 0.6rem; }
+        .kc-text { font-size: 0.62rem; color: var(--text-muted); line-height: 1.5; }
+        .kc-eq {
+            font-family: var(--font-mono); font-size: 0.68rem; color: var(--cyan);
+            background: rgba(34,211,238,0.04); border: 1px solid rgba(34,211,238,0.08);
+            border-radius: var(--radius-sm); padding: 0.4rem 0.6rem; margin: 0.4rem 0;
+            text-align: center; letter-spacing: 0.5px;
+        }
+        .kc-challenge {
+            background: rgba(245,158,11,0.05); border: 1px solid rgba(245,158,11,0.1);
+            border-radius: var(--radius-sm); padding: 0.35rem 0.5rem; margin-top: 0.3rem;
+            font-size: 0.58rem; color: var(--warning);
+        }
+        .kc-challenge strong { color: #fbbf24; }
+
+        /* ═══ FEATURE 2: Live Formula Dashboard ═══ */
+        .formula-panel { flex: 0 0 auto; }
+        .formula-grid { display: flex; flex-direction: column; gap: 0.35rem; padding: 0.5rem 0.7rem; }
+        .formula-item {
+            background: rgba(34,211,238,0.03); border: 1px solid rgba(34,211,238,0.06);
+            border-radius: var(--radius-sm); padding: 0.35rem 0.5rem;
+            transition: all 0.3s var(--transition);
+        }
+        .formula-item.active { border-color: rgba(34,211,238,0.2); background: rgba(34,211,238,0.06); box-shadow: 0 0 10px rgba(34,211,238,0.05); }
+        .fi-name { font-size: 0.55rem; color: var(--text-dim); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .fi-eq { font-family: var(--font-mono); font-size: 0.62rem; color: var(--cyan); margin-top: 0.15rem; }
+        .fi-val { font-family: var(--font-mono); font-size: 0.55rem; color: var(--accent); margin-top: 0.1rem; }
+
+        /* ═══ FEATURE 3: Tutorial Mode ═══ */
+        .tutorial-overlay {
+            position: fixed; inset: 0; z-index: 500;
+            background: rgba(5,8,15,0.7); backdrop-filter: blur(4px);
+            display: none; align-items: center; justify-content: center;
+        }
+        .tutorial-overlay.show { display: flex; }
+        .tutorial-card {
+            background: var(--bg-card); border: 1px solid rgba(139,92,246,0.2);
+            border-radius: var(--radius-lg); padding: 1.5rem 2rem;
+            max-width: 520px; width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(139,92,246,0.1);
+            animation: tutorialIn 0.4s var(--transition);
+        }
+        @keyframes tutorialIn { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        .tc-badge { font-size: 0.55rem; font-family: var(--font-mono); color: var(--purple); background: rgba(139,92,246,0.1); padding: 0.15rem 0.5rem; border-radius: 3px; display: inline-block; margin-bottom: 0.6rem; }
+        .tc-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .tc-body { font-size: 0.78rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem; }
+        .tc-body .highlight { color: var(--cyan); font-weight: 600; }
+        .tc-eq { font-family: var(--font-mono); font-size: 0.75rem; color: var(--cyan); background: rgba(34,211,238,0.04); border: 1px solid rgba(34,211,238,0.08); border-radius: var(--radius-sm); padding: 0.5rem 0.8rem; margin: 0.6rem 0; text-align: center; }
+        .tc-footer { display: flex; justify-content: space-between; align-items: center; }
+        .tc-dots { display: flex; gap: 0.3rem; }
+        .tc-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.1); }
+        .tc-dot.active { background: var(--purple); box-shadow: 0 0 6px var(--purple-glow); }
+        .tc-btns { display: flex; gap: 0.5rem; }
+        .tc-btn {
+            padding: 0.45rem 1rem; border-radius: var(--radius-sm);
+            font-size: 0.72rem; font-weight: 600; cursor: pointer;
+            border: 1px solid var(--border); background: transparent; color: var(--text-muted);
+            transition: all 0.2s; font-family: var(--font-main);
+        }
+        .tc-btn:hover { border-color: var(--border-hover); color: var(--text-main); }
+        .tc-btn-primary { background: linear-gradient(135deg, var(--purple), #6d28d9); color: white; border-color: transparent; }
+        .tc-btn-primary:hover { box-shadow: 0 4px 16px rgba(139,92,246,0.3); }
+
+        /* ─── Controls ───────────────────────────── */
+        .ctrl-group { display: flex; flex-direction: column; gap: 0.5rem; padding: 0.5rem 0.7rem; }
+        .ctrl-row label { display: flex; justify-content: space-between; font-size: 0.62rem; color: var(--text-muted); margin-bottom: 0.15rem; }
+        .ctrl-row label span { color: var(--primary); font-family: var(--font-mono); }
+        input[type="range"] { width: 100%; height: 3px; background: rgba(255,255,255,0.05); border-radius: 99px; outline: none; -webkit-appearance: none; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; border-radius: 50%; background: var(--primary); cursor: pointer; box-shadow: 0 0 8px var(--primary-glow); }
+        .btn {
+            width: 100%; padding: 0.5rem; border: none; border-radius: var(--radius-sm);
+            font-weight: 600; font-size: 0.72rem; cursor: pointer;
+            transition: all 0.25s var(--transition); display: flex; align-items: center; justify-content: center; gap: 0.35rem;
+        }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), #2563eb); color: white; }
+        .btn-primary:hover { box-shadow: 0 4px 16px rgba(59,130,246,0.25); transform: translateY(-1px); }
+        .rmse-box { text-align: center; padding: 0.4rem; background: rgba(59,130,246,0.03); border: 1px solid rgba(59,130,246,0.08); border-radius: var(--radius-sm); }
+        .rmse-box .rl { font-size: 0.52rem; color: var(--text-dim); text-transform: uppercase; }
+        .rmse-box .rv { font-size: 1rem; font-weight: 700; font-family: var(--font-mono); color: var(--warning); }
+
+        /* ─── Console ────────────────────────────── */
+        .con-body {
+            flex: 1; background: rgba(3,4,8,0.9); font-family: var(--font-mono);
+            font-size: 0.62rem; color: #60a5fa; overflow-y: auto; padding: 0.5rem 0.7rem;
+            display: flex; flex-direction: column; gap: 0.1rem;
+        }
+        .con-body::-webkit-scrollbar { width: 2px; }
+        .con-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.04); border-radius: 99px; }
+        .ll { opacity: 0.85; line-height: 1.3; animation: logIn 0.25s ease; }
+        @keyframes logIn { from { opacity: 0; transform: translateX(-6px); } }
+        .l-sys { color: #818cf8; } .l-ok { color: #34d399; } .l-warn { color: #fbbf24; } .l-info { color: #60a5fa; }
+
+        /* ─── Canvas Overlay ─────────────────────── */
+        .chart-body { flex: 1; min-height: 100px; }
+        .chart-body canvas { width: 100% !important; height: 100% !important; display: block; }
+
+        /* ─── Particles BG ───────────────────────── */
+        #particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+        /* ─── Loading ────────────────────────────── */
+        .loader { position: fixed; inset: 0; z-index: 9999; background: var(--bg-deep); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.2rem; transition: opacity 0.8s, visibility 0.8s; }
+        .loader.off { opacity: 0; visibility: hidden; pointer-events: none; }
+        .loader-ring { width: 40px; height: 40px; border: 2.5px solid rgba(59,130,246,0.12); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.7s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loader-txt { font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono); }
+        .loader-bar { width: 180px; height: 2px; background: rgba(255,255,255,0.03); border-radius: 99px; overflow: hidden; }
+        .loader-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--primary), var(--accent)); animation: lp 2s ease-in-out forwards; }
+        @keyframes lp { to { width: 100%; } }
+
+        /* ─── Creator Credits ─────────────────────── */
+        .credits {
+            padding: 0.6rem 0.6rem 0.5rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            position: relative;
+        }
+        .credits::before {
+            content: '';
+            position: absolute; top: 0; left: 20%; right: 20%; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), var(--accent), transparent);
+        }
+        .credits-line {
+            font-size: 0.52rem; color: var(--text-dim);
+            line-height: 1.5; letter-spacing: 0.3px;
+        }
+        .credits-line a {
+            color: var(--text-muted); text-decoration: none;
+            transition: color 0.2s;
+        }
+        .credits-line a:hover { color: var(--primary); }
+        .credits-team {
+            display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+            margin-top: 0.3rem;
+        }
+        .credit-chip {
+            font-size: 0.48rem; font-family: var(--font-mono);
+            padding: 0.1rem 0.4rem; border-radius: 3px;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            background: rgba(255,255,255,0.02);
+            transition: all 0.3s;
+        }
+        .credit-chip:hover {
+            border-color: rgba(59,130,246,0.2);
+            background: rgba(59,130,246,0.04);
+            color: var(--primary);
+        }
+        .credit-chip .cc-dot {
+            display: inline-block; width: 4px; height: 4px;
+            border-radius: 50%; margin-right: 0.25rem;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading -->
+    <div class="loader" id="loader"><div class="loader-ring"></div><div class="loader-txt">Initializing OpenFlow3D v3.0 Educational Engine...</div><div class="loader-bar"><div class="loader-bar-fill"></div></div></div>
+    <canvas id="particles"></canvas>
+
+    <!-- Tutorial Overlay (FEATURE 3) -->
+    <div class="tutorial-overlay" id="tutorialOverlay">
+        <div class="tutorial-card">
+            <div class="tc-badge" id="tc-badge">STAGE 1 / 12</div>
+            <div class="tc-title" id="tc-title">CAD Geometry Import</div>
+            <div class="tc-body" id="tc-body">Loading...</div>
+            <div id="tc-eq-container"></div>
+            <div class="tc-footer">
+                <div class="tc-dots" id="tc-dots"></div>
+                <div class="tc-btns">
+                    <button class="tc-btn" onclick="closeTutorial()">Skip</button>
+                    <button class="tc-btn tc-btn-primary" id="tc-next" onclick="nextTutorial()">Next &rarr;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo-area">
+            <div class="logo-icon">&#937;</div>
+            <div class="logo-text"><h1>OpenFlow3D v3.0</h1><span>Educational Web-CAE Engine &mdash; by iGS &amp; AEOS</span></div>
+        </div>
+        <div class="header-right">
+            <div class="badge badge-purple" onclick="openTutorial()">&#x1F393; Tutorial Mode</div>
+            <div class="badge badge-dim" id="fps-counter">-- FPS</div>
+            <div class="badge badge-green"><div class="dot-pulse"></div> WebGL Active</div>
+        </div>
+    </header>
+
+    <!-- App -->
+    <div class="app-layout">
+        <!-- Sidebar: 12 Stages -->
+        <div class="sidebar">
+            <div class="sidebar-head">12-Stage Workflow <span class="counter" id="step-ctr">1/12</span></div>
+            <div class="stepper-scroll">
+                <div class="stepper" id="stepper"></div>
+            </div>
+            <div class="sidebar-foot">
+                <div class="prog-label"><span>Progress</span><span id="prog-pct">8%</span></div>
+                <div class="prog-bg"><div class="prog-fill" id="prog-fill" style="width:8%"></div></div>
+            </div>
+            <div class="credits">
+                <div class="credits-line">Created by <a href="#">iGS</a> &bull; OpenFlow3D Project &bull; 2026</div>
+                <div class="credits-team">
+                    <span class="credit-chip"><span class="cc-dot" style="background:#06d6a0;"></span>iGS Horace</span>
+                    <span class="credit-chip"><span class="cc-dot" style="background:#3b82f6;"></span>iGS AEOS Team</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <div class="top-grid">
+                <!-- 3D Viewport -->
+                <div class="panel vp-container">
+                    <div class="p-head">
+                        <div class="p-title">&#128300; 3D CAE Viewport</div>
+                        <span class="p-badge" id="phase-badge">Initializing</span>
+                    </div>
+                    <div class="p-body vp-body">
+                        <canvas id="three-viewport"></canvas>
+                        <div class="vp-overlay">
+                            <div class="vp-chip"><div class="d"></div> WebGL 2.0</div>
+                            <div class="vp-chip" id="tri-cnt">&#9650; 0 Tris</div>
+                        </div>
+                    </div>
+                    <div class="stats-row">
+                        <div class="stat"><div class="stat-l" id="sl1">Edges</div><div class="stat-v" id="sv1">48</div></div>
+                        <div class="stat"><div class="stat-l" id="sl2">Volume</div><div class="stat-v" id="sv2">52.8cm&#179;</div></div>
+                        <div class="stat"><div class="stat-l" id="sl3">Quality</div><div class="stat-v" id="sv3">--</div></div>
+                        <div class="stat"><div class="stat-l" id="sl4">Stage</div><div class="stat-v" id="sv4">1/12</div></div>
+                    </div>
+                    <div class="task-prog" id="task-prog">
+                        <div class="tp-label"><span id="tp-name">--</span><span id="tp-pct">0%</span></div>
+                        <div class="tp-bg"><div class="tp-fill" id="tp-bar"></div></div>
+                    </div>
+                </div>
+
+                <!-- Right Stack -->
+                <div class="right-stack">
+                    <!-- Knowledge Card (FEATURE 1) -->
+                    <div class="knowledge-card" id="kc">
+                        <div class="kc-header" onclick="toggleKC()">
+                            <div class="kc-title">&#128214; <span id="kc-title">Knowledge Card</span> <span class="kc-bloom" id="kc-bloom">L1 Remember</span></div>
+                            <span class="kc-toggle" id="kc-arrow">&#9660;</span>
+                        </div>
+                        <div class="kc-body" id="kc-body"></div>
+                    </div>
+
+                    <!-- Live Formula Dashboard (FEATURE 2) -->
+                    <div class="panel formula-panel">
+                        <div class="p-head">
+                            <div class="p-title">&#128200; Live Equations</div>
+                            <span class="p-badge" id="eq-active">--</span>
+                        </div>
+                        <div class="formula-grid" id="formula-grid"></div>
+                    </div>
+
+                    <!-- Loss Chart / Controls -->
+                    <div class="panel" style="flex:1;">
+                        <div class="p-head">
+                            <div class="p-title">&#128200; PINN / Charts</div>
+                            <span class="p-badge" id="loss-badge">--</span>
+                        </div>
+                        <div class="p-body chart-body"><canvas id="lossCanvas"></canvas></div>
+                        <div id="pinn-ctrl" style="display:none;padding:0.4rem 0.6rem;border-top:1px solid var(--border);">
+                            <button class="btn btn-primary" id="btn-train" onclick="triggerPinn()">&#9889; Start PINN Training</button>
+                        </div>
+                        <div id="calib-ctrl" style="display:none;padding:0.4rem 0.6rem;border-top:1px solid var(--border);">
+                            <div class="ctrl-group">
+                                <div class="ctrl-row"><label>Time Delay <span id="lbl-delay">+0.25s</span></label><input type="range" min="-0.5" max="0.5" step="0.01" value="0.25" id="sl-delay" oninput="updateCalib()"></div>
+                                <div class="ctrl-row"><label>D&#8321; Offset <span id="lbl-visc">-5.0%</span></label><input type="range" min="-10" max="10" step="0.5" value="-5" id="sl-visc" oninput="updateCalib()"></div>
+                                <div class="rmse-box"><div class="rl">RMSE</div><div class="rv" id="rmse-val">7.85 MPa</div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Console -->
+            <div class="bottom-bar">
+                <div class="panel" style="height:100%;">
+                    <div class="p-head"><div class="p-title">&#128187; Console</div><span class="p-badge" id="log-cnt">0</span></div>
+                    <div class="con-body" id="console"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// OpenFlow3D v3.0 — Educational Engine Core
+// 12-Stage Workflow + Knowledge Cards + Live Formulas + Tutorial
+// ═══════════════════════════════════════════════════════════
+
+// ─── 12-Stage Definitions ──────────────────────────────────
+const STAGES = [
+    { id:1,  title:'CAD Geometry Import',      sub:'STEP/IGES 3D model parsing & validation',  icon:'S01', color:'#3b82f6' },
+    { id:2,  title:'Runner & Gate Design',      sub:'Sprue, runner, gate placement & sizing',   icon:'S02', color:'#6366f1' },
+    { id:3,  title:'Wasm BLM Mesh Generation',  sub:'Gmsh WebAssembly boundary-layer meshing',  icon:'S03', color:'#06d6a0' },
+    { id:4,  title:'Mesh Quality Inspection',   sub:'Jacobian, aspect ratio & skewness check',  icon:'S04', color:'#22d3ee' },
+    { id:5,  title:'Material Database (WLF)',    sub:'Cross-WLF viscosity & Tait PVT loading',  icon:'S05', color:'#8b5cf6' },
+    { id:6,  title:'Machine & Process Setup',   sub:'Injection pressure, speed & temperature',  icon:'S06', color:'#f59e0b' },
+    { id:7,  title:'PINN Physics Training',     sub:'Laplace/N-S equation neural pre-training', icon:'S07', color:'#ec4899' },
+    { id:8,  title:'Melt Filling Analysis',     sub:'3D melt front propagation & weld lines',   icon:'S08', color:'#ef4444' },
+    { id:9,  title:'Packing & Holding',         sub:'Post-fill packing pressure & gate seal',   icon:'S09', color:'#f97316' },
+    { id:10, title:'Cooling Channel Analysis',  sub:'Conformal cooling efficiency & cycle time', icon:'S10', color:'#14b8a6' },
+    { id:11, title:'Warpage & Shrinkage',       sub:'Residual stress & part deformation pred.',  icon:'S11', color:'#a855f7' },
+    { id:12, title:'Digital Twin Calibration',  sub:'iMolding sensor-sim curve alignment',      icon:'S12', color:'#06d6a0' },
+];
+
+// ─── Knowledge Card Content (FEATURE 1) ────────────────────
+const KNOWLEDGE = {
+    1: { title:'CAD Kernel & B-Rep', bloom:'L1 Remember',
+         text:'Computer-Aided Design (CAD) models use Boundary Representation (B-Rep) to define 3D solid geometry. STEP AP203/AP214 is the ISO standard exchange format used by all major CAD systems (CATIA, NX, SolidWorks).',
+         eq:'STEP AP203 = ISO 10303-203',
+         challenge:'Why is B-Rep preferred over CSG for injection mold simulation? Hint: think about surface mesh extraction.' },
+    2: { title:'Runner System Design', bloom:'L3 Apply',
+         text:'The runner system delivers molten plastic from the machine nozzle to the mold cavity. Key parameters: runner diameter (D), length (L), and pressure drop. The runner cross-section affects shear rate and heat loss.',
+         eq:'Delta P = (8 * eta * L * Q) / (pi * R^4)  [Hagen-Poiseuille]',
+         challenge:'If you double the runner diameter, how much does the pressure drop change? Calculate the ratio.' },
+    3: { title:'Boundary Layer Mesh (BLM)', bloom:'L4 Analyze',
+         text:'BLM creates prism layers near walls to resolve the velocity boundary layer. The first layer height must satisfy y+ < 1 for accurate wall shear stress. Growth ratio typically 1.1-1.3.',
+         eq:'y+ = (u_tau * y) / nu,  where u_tau = sqrt(tau_w / rho)',
+         challenge:'If your first layer height is 0.01mm and growth ratio is 1.2, what is the total BLM thickness for 5 layers?' },
+    4: { title:'Mesh Quality Metrics', bloom:'L4 Analyze',
+         text:'Mesh quality directly impacts solution accuracy and convergence. Key metrics: Jacobian (>0.3), aspect ratio (<5:1 for tetrahedral), skewness (<0.95), and orthogonality (>0.1).',
+         eq:'Jacobian = det(J) / |J_ideal|,  range [0, 1]',
+         challenge:'A mesh element has Jacobian = 0.15. Should you accept it for a production simulation? Why or why not?' },
+    5: { title:'Cross-WLF Viscosity Model', bloom:'L5 Evaluate',
+         text:'The Cross-WLF model describes the shear-thinning behavior of polymer melts. It combines the Cross model (shear-rate dependence) with WLF equation (temperature dependence). This is THE standard in injection molding CAE.',
+         eq:'eta(T,p,gamma) = eta0(T,p) / [1 + (eta0*gamma/tau*)^(1-n)]',
+         challenge:'PP has n=0.3. What does this mean physically? Compare with n=0.8 for a near-Newtonian fluid.' },
+    6: { title:'Process Window Optimization', bloom:'L5 Evaluate',
+         text:'The molding process window defines the safe operating range for injection speed, pressure, melt temperature, and mold temperature. Operating outside this window causes defects: short shots, flash, burn marks, or warpage.',
+         eq:'Moldability Index = f(P_inj, V_inj, T_melt, T_mold)',
+         challenge:'List 3 defects caused by too-high injection speed and 3 defects caused by too-low melt temperature.' },
+    7: { title:'PINN: Physics-Informed Neural Networks', bloom:'L6 Create',
+         text:'PINNs embed physical laws (PDEs) directly into the neural network loss function. For injection molding, we enforce the Laplace equation (steady-state pressure) or Navier-Stokes (transient flow).',
+         eq:'L_total = L_boundary + lambda * L_physics,  where L_physics = ||nabla^2 p||^2',
+         challenge:'Design a PINN loss function that enforces BOTH pressure boundary conditions AND the no-slip wall condition.' },
+    8: { title:'Melt Front & Fountain Flow', bloom:'L4 Analyze',
+         text:'During filling, the melt front advances with a characteristic fountain flow pattern: material at the center moves faster and folds outward at the front. Weld lines form where two fronts meet.',
+         eq:'Re = (rho * v * D_h) / eta,  typically Re << 1 (creeping flow)',
+         challenge:'Why is the Reynolds number extremely low in injection molding? What does this tell us about inertia vs. viscous forces?' },
+    9: { title:'Packing Phase & PVT Behavior', bloom:'L5 Evaluate',
+         text:'After filling, the packing phase compensates for volumetric shrinkage as the polymer cools. The Tait PVT equation predicts specific volume changes. Gate seal time determines effective packing duration.',
+         eq:'v(T,p) = v0(T) * [1 - C * ln(1 + p/B(T))],  C = 0.0894',
+         challenge:'If the gate seals at t=3.5s but packing time is set to 8s, what happens to the part after t=3.5s?' },
+    10:{ title:'Cooling Efficiency & Cycle Time', bloom:'L3 Apply',
+         text:'Cooling accounts for 60-80% of total cycle time. Conformal cooling channels follow the part geometry for uniform heat extraction. The Biot number determines if lumped-capacitance analysis is valid.',
+         eq:'Bi = (h * L_c) / k,  if Bi < 0.1 -> lumped capacitance OK',
+         challenge:'Calculate the minimum cooling time for a 2mm-thick PP part (alpha = 1.1e-7 m2/s) to reach ejection temperature.' },
+    11:{ title:'Warpage & Residual Stress', bloom:'L5 Evaluate',
+         text:'Warpage results from non-uniform shrinkage caused by: (1) differential cooling, (2) molecular orientation, (3) crystallinity gradients. The viscoelastic stress relaxation model predicts residual stresses.',
+         eq:'sigma_residual = E * (alpha * Delta_T + Delta_epsilon_crystallization)',
+         challenge:'Why does a flat plate with one-sided cooling warp into a concave shape? Draw the temperature and stress profiles.' },
+    12:{ title:'Digital Twin & Inverse Problem', bloom:'L6 Create',
+         text:'Digital Twin calibration solves the inverse problem: given real sensor data (cavity pressure, temperature), find the material parameters (D1, n) that minimize the simulation-experiment gap using Levenberg-Marquardt optimization.',
+         eq:'min ||P_sim(D1,n) - P_sensor||^2,  using J^T*J + lambda*I',
+         challenge:'Design an experiment to calibrate Cross-WLF D1: what sensor data do you need, and how many runs are sufficient?' },
+};
+
+// ─── Live Formula Definitions (FEATURE 2) ──────────────────
+const FORMULAS = [
+    { name:'Cross-WLF', eq:'eta = eta0 / [1 + (eta0*gamma/tau*)^(1-n)]', val:'eta0 = -- Pa.s', stages:[5,6,7,8,12] },
+    { name:'Tait PVT',  eq:'v = v0 * [1 - C*ln(1 + p/B(T))]',          val:'C = 0.0894',    stages:[5,9,11] },
+    { name:'Fourier',   eq:'rho*Cp*dT/dt = k*nabla^2(T) + eta*gamma^2', val:'k = 0.22 W/mK', stages:[8,9,10] },
+    { name:'PINN Loss', eq:'L = L_BC + lambda*||nabla^2 p||^2',         val:'lambda = 0.1',  stages:[7] },
+    { name:'LM Solver', eq:'(J^T*J + mu*I)*dp = -J^T*r',               val:'mu = adaptive',  stages:[12] },
+];
+
+// ─── Tutorial Content (FEATURE 3) ──────────────────────────
+const TUTORIALS = [
+    { badge:'OVERVIEW', title:'Welcome to OpenFlow3D v3.0', body:'This educational platform guides you through the <span class="highlight">complete injection molding simulation pipeline</span> in 12 professional stages. Each stage teaches real-world CAE engineering concepts used in industry.' },
+    { badge:'STAGE 1-2', title:'Geometry & Runner Design', body:'Every simulation begins with <span class="highlight">importing a 3D CAD model</span> (STEP format). Then you design the runner system that delivers molten plastic from the nozzle to the mold cavity. Gate location directly affects fill pattern and weld line positions.', eq:'Delta P = (8*eta*L*Q) / (pi*R^4)' },
+    { badge:'STAGE 3-4', title:'Meshing & Quality', body:'The geometry is divided into <span class="highlight">finite elements (mesh)</span> for numerical solving. Boundary Layer Mesh (BLM) adds thin prism layers near walls to capture the velocity gradient. Quality metrics like Jacobian and skewness must pass thresholds.' },
+    { badge:'STAGE 5-6', title:'Material & Process', body:'Load polymer material data: the <span class="highlight">Cross-WLF viscosity model</span> describes how viscosity changes with temperature and shear rate. Set machine parameters like injection speed, melt temperature, and clamping force.', eq:'eta = eta0 / [1 + (eta0*gamma/tau*)^(1-n)]' },
+    { badge:'STAGE 7-8', title:'PINN & Filling', body:'<span class="highlight">Physics-Informed Neural Networks</span> pre-train on the pressure field using PDE constraints. Then the full 3D filling simulation tracks the melt front, predicts weld lines, and calculates injection pressure.' },
+    { badge:'STAGE 9-10', title:'Packing & Cooling', body:'After filling, <span class="highlight">packing pressure</span> compensates for shrinkage as the polymer solidifies. Cooling channels extract heat. Conformal cooling can reduce cycle time by 30-40%.', eq:'v(T,p) = v0(T) * [1 - 0.0894*ln(1+p/B)]' },
+    { badge:'STAGE 11-12', title:'Warpage & Digital Twin', body:'Non-uniform cooling causes <span class="highlight">warpage and residual stresses</span>. Finally, Digital Twin calibration aligns simulation with real sensor data using inverse optimization (Levenberg-Marquardt).' },
+];
+
+// ─── State ──────────────────────────────────────────────────
+let currentStage = 1, isTraining = false, lossHistory = [], epochCount = 0;
+let fillProg = 0, meshProg = 0, logN = 0, frameN = 0, lastFT = performance.now();
+let fillInt, trainInt, meshInt;
+let tutorialIdx = 0, kcOpen = false;
+
+// ─── Build 12-Stage Stepper ────────────────────────────────
+function buildStepper() {
+    const el = document.getElementById('stepper');
+    el.innerHTML = STAGES.map(s =>
+        `<div class="step${s.id===1?' active':''}" id="step-${s.id}" onclick="goToStage(${s.id})">
+            <div class="step-top"><span class="step-title">${s.id}. ${s.title}</span><span class="step-tag">${s.icon}</span></div>
+            <div class="step-sub">${s.sub}</div>
+        </div>`
+    ).join('');
+}
+
+// ─── Build Formula Grid (FEATURE 2) ────────────────────────
+function buildFormulas() {
+    const el = document.getElementById('formula-grid');
+    el.innerHTML = FORMULAS.map((f,i) =>
+        `<div class="formula-item" id="fi-${i}">
+            <div class="fi-name">${f.name}</div>
+            <div class="fi-eq">${f.eq}</div>
+            <div class="fi-val">${f.val}</div>
+        </div>`
+    ).join('');
+}
+function updateFormulas(stage) {
+    FORMULAS.forEach((f,i) => {
+        const el = document.getElementById(`fi-${i}`);
+        const isActive = f.stages.includes(stage);
+        el.classList.toggle('active', isActive);
+    });
+    const activeNames = FORMULAS.filter(f => f.stages.includes(stage)).map(f => f.name);
+    document.getElementById('eq-active').textContent = activeNames.length ? activeNames.join(', ') : 'None';
+}
+
+// ─── Knowledge Card (FEATURE 1) ────────────────────────────
+function updateKC(stage) {
+    const k = KNOWLEDGE[stage];
+    if (!k) return;
+    document.getElementById('kc-title').textContent = k.title;
+    document.getElementById('kc-bloom').textContent = k.bloom;
+    const body = document.getElementById('kc-body');
+    body.innerHTML = `<div class="kc-text">${k.text}</div>` +
+        `<div class="kc-eq">${k.eq}</div>` +
+        `<div class="kc-challenge"><strong>&#x1F3AF; PBL Challenge:</strong> ${k.challenge}</div>`;
+    kcOpen = false;
+    body.classList.remove('open');
+    document.getElementById('kc-arrow').textContent = '\u25BC';
+}
+function toggleKC() {
+    kcOpen = !kcOpen;
+    document.getElementById('kc-body').classList.toggle('open', kcOpen);
+    document.getElementById('kc-arrow').textContent = kcOpen ? '\u25B2' : '\u25BC';
+}
+
+// ─── Tutorial Mode (FEATURE 3) ─────────────────────────────
+function openTutorial() {
+    tutorialIdx = 0;
+    renderTutorial();
+    document.getElementById('tutorialOverlay').classList.add('show');
+}
+function closeTutorial() { document.getElementById('tutorialOverlay').classList.remove('show'); }
+function nextTutorial() {
+    tutorialIdx++;
+    if (tutorialIdx >= TUTORIALS.length) { closeTutorial(); return; }
+    renderTutorial();
+}
+function renderTutorial() {
+    const t = TUTORIALS[tutorialIdx];
+    document.getElementById('tc-badge').textContent = t.badge;
+    document.getElementById('tc-title').textContent = t.title;
+    document.getElementById('tc-body').innerHTML = t.body;
+    const eqC = document.getElementById('tc-eq-container');
+    eqC.innerHTML = t.eq ? `<div class="tc-eq">${t.eq}</div>` : '';
+    document.getElementById('tc-next').innerHTML = tutorialIdx < TUTORIALS.length - 1 ? 'Next &rarr;' : 'Finish &#10003;';
+    const dots = document.getElementById('tc-dots');
+    dots.innerHTML = TUTORIALS.map((_,i) => `<div class="tc-dot${i===tutorialIdx?' active':''}"></div>`).join('');
+}
+
+// ─── Particles ──────────────────────────────────────────────
+(function() {
+    const c = document.getElementById('particles'), ctx = c.getContext('2d');
+    let ps = [];
+    function resize() { c.width = innerWidth; c.height = innerHeight; }
+    resize(); addEventListener('resize', resize);
+    for (let i = 0; i < 50; i++) ps.push({ x: Math.random()*c.width, y: Math.random()*c.height, vx: (Math.random()-0.5)*0.25, vy: (Math.random()-0.5)*0.25, r: Math.random()*1.2+0.4, a: Math.random()*0.12+0.02 });
+    (function draw() {
+        ctx.clearRect(0,0,c.width,c.height);
+        ps.forEach(p => {
+            p.x += p.vx; p.y += p.vy;
+            if (p.x < 0) p.x = c.width; if (p.x > c.width) p.x = 0;
+            if (p.y < 0) p.y = c.height; if (p.y > c.height) p.y = 0;
+            ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+            ctx.fillStyle = `rgba(59,130,246,${p.a})`; ctx.fill();
+        });
+        for (let i=0;i<ps.length;i++) for (let j=i+1;j<ps.length;j++) {
+            const dx=ps[i].x-ps[j].x, dy=ps[i].y-ps[j].y, d=Math.sqrt(dx*dx+dy*dy);
+            if (d<130) { ctx.beginPath(); ctx.moveTo(ps[i].x,ps[i].y); ctx.lineTo(ps[j].x,ps[j].y);
+                ctx.strokeStyle=`rgba(59,130,246,${0.025*(1-d/130)})`; ctx.lineWidth=0.5; ctx.stroke(); }
+        }
+        requestAnimationFrame(draw);
+    })();
+})();
+
+// ─── Three.js Scene ─────────────────────────────────────────
+let scene, camera, renderer, phoneCase, moldEdges, moldMat, meshWire, flowParts;
+let rotSpd = 0.002, tgtRotY = 0;
+
+function initThree() {
+    const cv = document.getElementById('three-viewport'), box = cv.parentElement;
+    scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x050810, 0.012);
+    camera = new THREE.PerspectiveCamera(42, box.clientWidth / box.clientHeight, 0.1, 1000);
+    camera.position.set(4, 3, 5); camera.lookAt(0, 0, 0);
+    renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true, powerPreference: 'high-performance' });
+    renderer.setSize(box.clientWidth, box.clientHeight);
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.2;
+
+    scene.add(new THREE.AmbientLight(0x334466, 0.6));
+    const dl = new THREE.DirectionalLight(0x88aaff, 1.2); dl.position.set(5, 8, 5); scene.add(dl);
+    const pl1 = new THREE.PointLight(0x3b82f6, 1.5, 15); pl1.position.set(-3, 3, 3); scene.add(pl1);
+    const pl2 = new THREE.PointLight(0x06d6a0, 0.8, 12); pl2.position.set(3, -2, -3); scene.add(pl2);
+
+    const grid = new THREE.GridHelper(10, 20, 0x1a2540, 0x0f1a2e); grid.position.y = -1.5; scene.add(grid);
+    scene.add(new THREE.AxesHelper(1.2).translateX(-4).translateY(-1.5).translateZ(-4));
+
+    buildModel();
+
+    addEventListener('resize', () => { const w=box.clientWidth, h=box.clientHeight; camera.aspect=w/h; camera.updateProjectionMatrix(); renderer.setSize(w,h); });
+    let drag=false, px=0, py=0;
+    cv.addEventListener('mousedown', e => { drag=true; px=e.clientX; py=e.clientY; });
+    cv.addEventListener('mousemove', e => { if(!drag) return; tgtRotY+=(e.clientX-px)*0.005; camera.position.y=Math.max(0.5,Math.min(6,camera.position.y+(e.clientY-py)*0.01)); camera.lookAt(0,0,0); px=e.clientX; py=e.clientY; });
+    cv.addEventListener('mouseup', ()=>drag=false); cv.addEventListener('mouseleave', ()=>drag=false);
+    cv.addEventListener('wheel', e => { e.preventDefault(); camera.position.multiplyScalar(1+e.deltaY*0.001); camera.position.clampLength(3,12); camera.lookAt(0,0,0); }, {passive:false});
+}
+
+function buildModel() {
+    if (phoneCase) scene.remove(phoneCase);
+    if (moldEdges) scene.remove(moldEdges);
+    const sh = new THREE.Shape();
+    const w=1.5, h=3, r=0.3;
+    sh.moveTo(-w/2+r,-h/2); sh.lineTo(w/2-r,-h/2); sh.quadraticCurveTo(w/2,-h/2,w/2,-h/2+r);
+    sh.lineTo(w/2,h/2-r); sh.quadraticCurveTo(w/2,h/2,w/2-r,h/2);
+    sh.lineTo(-w/2+r,h/2); sh.quadraticCurveTo(-w/2,h/2,-w/2,h/2-r);
+    sh.lineTo(-w/2,-h/2+r); sh.quadraticCurveTo(-w/2,-h/2,-w/2+r,-h/2);
+    const geo = new THREE.ExtrudeGeometry(sh, {depth:0.15, bevelEnabled:true, bevelThickness:0.02, bevelSize:0.02, bevelSegments:3});
+    geo.center();
+    moldMat = new THREE.MeshPhysicalMaterial({color:0x2255aa, metalness:0.3, roughness:0.4, transparent:true, opacity:0.6, side:THREE.DoubleSide, clearcoat:0.3});
+    phoneCase = new THREE.Mesh(geo, moldMat); phoneCase.rotation.x = -Math.PI/2; scene.add(phoneCase);
+    const eGeo = new THREE.EdgesGeometry(geo, 15);
+    moldEdges = new THREE.LineSegments(eGeo, new THREE.LineBasicMaterial({color:0x3b82f6, transparent:true, opacity:0.5}));
+    moldEdges.rotation.x = -Math.PI/2; scene.add(moldEdges);
+    // Gate
+    const gate = new THREE.Mesh(new THREE.SphereGeometry(0.06,16,16), new THREE.MeshBasicMaterial({color:0xef4444}));
+    gate.position.set(0,0,-1.5); phoneCase.add(gate);
+    phoneCase.add(new THREE.Mesh(new THREE.SphereGeometry(0.12,16,16), new THREE.MeshBasicMaterial({color:0xef4444,transparent:true,opacity:0.2})).translateZ(-1.5));
+    updateTri();
+}
+
+function updateTri() { let t=0; scene.traverse(o=>{if(o.isMesh&&o.geometry) t+=(o.geometry.index?o.geometry.index.count/3:o.geometry.attributes.position.count/3);}); document.getElementById('tri-cnt').textContent=`\u25B2 ${Math.round(t)} Tris`; }
+
+function addWire(prog) {
+    if(meshWire) scene.remove(meshWire);
+    const wg = new THREE.WireframeGeometry(phoneCase.geometry);
+    const pos = wg.attributes.position.array;
+    const n = Math.floor(pos.length/3*prog);
+    const pg = new THREE.BufferGeometry();
+    pg.setAttribute('position', new THREE.Float32BufferAttribute(pos.slice(0,n*3),3));
+    meshWire = new THREE.LineSegments(pg, new THREE.LineBasicMaterial({color:0x06d6a0,transparent:true,opacity:0.25}));
+    meshWire.rotation.x = -Math.PI/2; scene.add(meshWire); updateTri();
+}
+
+function addFlow(prog) {
+    if(flowParts) scene.remove(flowParts);
+    const cnt = Math.floor(prog*200); if(cnt<1) return;
+    const pos=new Float32Array(cnt*3), col=new Float32Array(cnt*3);
+    for(let i=0;i<cnt;i++){
+        pos[i*3]=(Math.random()-0.5)*1.4; pos[i*3+1]=(Math.random()-0.5)*0.12; pos[i*3+2]=-1.5+prog*3*Math.random();
+        const c=new THREE.Color(); c.setHSL(0.6-(pos[i*3+2]/1.5+0.5)*0.5,0.9,0.55);
+        col[i*3]=c.r; col[i*3+1]=c.g; col[i*3+2]=c.b;
+    }
+    const pg=new THREE.BufferGeometry();
+    pg.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));
+    pg.setAttribute('color',new THREE.Float32BufferAttribute(col,3));
+    flowParts=new THREE.Points(pg,new THREE.PointsMaterial({size:0.03,vertexColors:true,transparent:true,opacity:0.8,blending:THREE.AdditiveBlending,depthWrite:false}));
+    flowParts.rotation.x=-Math.PI/2; scene.add(flowParts);
+}
+
+function animate() {
+    requestAnimationFrame(animate);
+    const t = Date.now()*0.001;
+    if(phoneCase) {
+        phoneCase.rotation.z += (tgtRotY-phoneCase.rotation.z)*0.04;
+        phoneCase.rotation.z += rotSpd;
+        if(moldEdges) moldEdges.rotation.z = phoneCase.rotation.z;
+        if(meshWire) meshWire.rotation.z = phoneCase.rotation.z;
+        if(flowParts) flowParts.rotation.z = phoneCase.rotation.z;
+    }
+    if(flowParts && (currentStage===8)) {
+        const p=flowParts.geometry.attributes.position.array;
+        for(let i=0;i<p.length;i+=3){p[i+2]+=0.005;if(p[i+2]>1.5)p[i+2]=-1.5;}
+        flowParts.geometry.attributes.position.needsUpdate=true;
+    }
+    if([5,6].includes(currentStage)&&phoneCase) moldMat.opacity=Math.sin(t*3)*0.12+0.6;
+    frameN++; const now=performance.now();
+    if(now-lastFT>1000){document.getElementById('fps-counter').textContent=`${frameN} FPS`;frameN=0;lastFT=now;}
+    renderer.render(scene, camera);
+}
+
+// ─── Console ────────────────────────────────────────────────
+function log(text, type='info') {
+    const el=document.createElement('div'); el.className=`ll l-${type}`;
+    el.textContent=`[${new Date().toLocaleTimeString('en-US',{hour12:false})}] ${text}`;
+    const c=document.getElementById('console'); c.appendChild(el); c.scrollTop=c.scrollHeight;
+    logN++; document.getElementById('log-cnt').textContent=logN;
+}
+
+// ─── Loss Graph ─────────────────────────────────────────────
+function drawLoss() {
+    const cv=document.getElementById('lossCanvas'), ctx=cv.getContext('2d'), box=cv.parentElement;
+    cv.width=box.clientWidth; cv.height=box.clientHeight;
+    const w=cv.width,h=cv.height,p=25;
+    ctx.clearRect(0,0,w,h);
+    ctx.strokeStyle='rgba(255,255,255,0.06)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(p,p);ctx.lineTo(p,h-p);ctx.lineTo(w-p,h-p);ctx.stroke();
+    ctx.fillStyle='rgba(255,255,255,0.2)';ctx.font='8px JetBrains Mono';ctx.fillText('Loss',4,p);ctx.fillText('Epoch',w-35,h-6);
+    if(!lossHistory.length){ctx.fillStyle='rgba(255,255,255,0.08)';ctx.font='10px Inter';ctx.fillText('Awaiting training...',w/2-50,h/2);return;}
+    const mE=200,mL=0.6,xy=(e,l)=>({x:p+(e/mE)*(w-2*p),y:(h-p)-(Math.min(l,mL)/mL)*(h-2*p)});
+    const gr=ctx.createLinearGradient(p,0,w-p,0);gr.addColorStop(0,'#f59e0b');gr.addColorStop(1,'#06d6a0');
+    ctx.strokeStyle=gr;ctx.lineWidth=2;ctx.beginPath();
+    lossHistory.forEach((pt,i)=>{const c=xy(pt.e,pt.t);i===0?ctx.moveTo(c.x,c.y):ctx.lineTo(c.x,c.y);});ctx.stroke();
+    ctx.strokeStyle='rgba(245,158,11,0.12)';ctx.lineWidth=6;ctx.beginPath();
+    lossHistory.forEach((pt,i)=>{const c=xy(pt.e,pt.t);i===0?ctx.moveTo(c.x,c.y):ctx.lineTo(c.x,c.y);});ctx.stroke();
+    ctx.strokeStyle='#3b82f6';ctx.lineWidth=1;ctx.setLineDash([4,3]);ctx.beginPath();
+    lossHistory.forEach((pt,i)=>{const c=xy(pt.e,pt.p);i===0?ctx.moveTo(c.x,c.y):ctx.lineTo(c.x,c.y);});ctx.stroke();ctx.setLineDash([]);
+    if(lossHistory.length){const last=lossHistory[lossHistory.length-1],c=xy(last.e,last.t);
+        ctx.beginPath();ctx.arc(c.x,c.y,4,0,Math.PI*2);ctx.fillStyle='#f59e0b';ctx.fill();
+        ctx.beginPath();ctx.arc(c.x,c.y,7,0,Math.PI*2);ctx.fillStyle='rgba(245,158,11,0.15)';ctx.fill();}
+}
+
+// ─── Stage Controller ───────────────────────────────────────
+function goToStage(n) {
+    clearInterval(fillInt); clearInterval(trainInt); clearInterval(meshInt);
+    isTraining=false; if(document.getElementById('btn-train')) document.getElementById('btn-train').textContent='\u26A1 Start PINN Training';
+    for(let i=1;i<=12;i++){const el=document.getElementById(`step-${i}`);el.classList.remove('active','done');if(i<n)el.classList.add('done');}
+    document.getElementById(`step-${n}`).classList.add('active');
+    currentStage=n;
+    document.getElementById('step-ctr').textContent=`${n}/12`;
+    document.getElementById('sv4').textContent=`${n}/12`;
+    const pct=Math.round((n/12)*100);
+    document.getElementById('prog-fill').style.width=`${pct}%`;
+    document.getElementById('prog-pct').textContent=`${pct}%`;
+    document.getElementById('pinn-ctrl').style.display=n===7?'block':'none';
+    document.getElementById('calib-ctrl').style.display=n===12?'block':'none';
+    const tp=document.getElementById('task-prog'); tp.classList.remove('show');
+    if(meshWire){scene.remove(meshWire);meshWire=null;}
+    if(flowParts){scene.remove(flowParts);flowParts=null;}
+    moldMat.opacity=0.6; moldMat.color.setHex(0x2255aa); moldMat.emissive.setHex(0x000000);
+    if(moldEdges) moldEdges.material.color.setHex(0x3b82f6);
+    updateKC(n); updateFormulas(n);
+    const handlers={1:h1,2:h2,3:h3,4:h4,5:h5,6:h6,7:h7,8:h8,9:h9,10:h10,11:h11,12:h12};
+    if(handlers[n]) handlers[n]();
+}
+
+function showTP(name){document.getElementById('task-prog').classList.add('show');document.getElementById('tp-name').textContent=name;setTP(0);}
+function setTP(p){document.getElementById('tp-pct').textContent=`${p}%`;document.getElementById('tp-bar').style.width=`${p}%`;}
+function setStat(l1,v1,l2,v2,l3,v3){document.getElementById('sl1').textContent=l1;document.getElementById('sv1').textContent=v1;document.getElementById('sl2').textContent=l2;document.getElementById('sv2').textContent=v2;document.getElementById('sl3').textContent=l3;document.getElementById('sv3').textContent=v3;}
+
+// ─── 12 Stage Handlers ──────────────────────────────────────
+function h1(){
+    log('[S01] Import CAD: phone_case_model.step','sys');log('  \u2713 OpenCASCADE parse: 64 faces, 48 edges','ok');
+    document.getElementById('phase-badge').textContent='CAD Loaded';
+    setStat('Edges','48','Volume','52.8cm\u00B3','Format','STEP AP203');
+    moldMat.color.setHex(0x2255aa); drawLoss();
+}
+function h2(){
+    log('[S02] Runner & gate design mode activated','sys');log('  \u2192 Gate type: Pin-point | Location: Center-bottom','info');
+    document.getElementById('phase-badge').textContent='Gate Design';
+    setStat('Gate','Pin-point','Runner D','6mm','Balance','98.2%');
+    moldMat.color.setHex(0x6366f1); moldMat.emissive.setHex(0x0a0020);
+}
+function h3(){
+    log('[S03] Gmsh WebAssembly mesh engine starting...','sys');
+    document.getElementById('phase-badge').textContent='Meshing...';
+    showTP('Gmsh BLM Mesh Generation');
+    setStat('Nodes','0','Elems','0','Quality','--');
+    if(moldEdges) moldEdges.material.color.setHex(0x06d6a0);
+    meshProg=0; clearInterval(meshInt);
+    meshInt=setInterval(()=>{
+        meshProg+=0.04; if(meshProg>=1){meshProg=1;clearInterval(meshInt);
+            log('[S03] \u2705 BLM mesh complete: 42,508 nodes','ok');
+            document.getElementById('phase-badge').textContent='Mesh Done';
+            setTimeout(()=>goToStage(4),1200);}
+        addWire(meshProg);
+        setStat('Nodes',Math.floor(meshProg*42508).toLocaleString(),'Elems',Math.floor(meshProg*112402).toLocaleString(),'Quality',(meshProg*0.94).toFixed(2));
+        setTP(Math.min(100,Math.round(meshProg*100)));
+    },80);
+}
+function h4(){
+    log('[S04] Mesh quality inspection...','sys');log('  \u2713 Min Jacobian: 0.31 | Max Aspect: 4.2:1 | Max Skew: 0.82','ok');log('  \u2713 All elements PASS quality threshold','ok');
+    document.getElementById('phase-badge').textContent='Quality OK';
+    setStat('Jacobian','0.31','Aspect','4.2:1','Skewness','0.82');
+    moldMat.color.setHex(0x22d3ee); moldMat.emissive.setHex(0x001520);
+}
+function h5(){
+    log('[S05] Loading material: Polypropylene (PP)','sys');log('  \u2713 Cross-WLF: n=0.3, tau*=25kPa, D1=4.48e10','ok');log('  \u2713 Tait PVT: C=0.0894, Tc=170\u00B0C','ok');
+    document.getElementById('phase-badge').textContent='Material Loaded';
+    setStat('Material','PP','n','0.30','D\u2081','4.48e10');
+    moldMat.color.setHex(0x8b5cf6); moldMat.emissive.setHex(0x100030);
+    // Update formula values
+    FORMULAS[0].val='eta0 = 29.2 Pa.s (230\u00B0C)'; FORMULAS[1].val='v = 1.283 cm\u00B3/g (230\u00B0C)'; buildFormulas(); updateFormulas(5);
+}
+function h6(){
+    log('[S06] Machine: Fanuc Roboshot 100t (\u03C632mm)','sys');log('  \u2713 Melt: 230\u00B0C | Mold: 40\u00B0C | Clamp: 100t','ok');
+    document.getElementById('phase-badge').textContent='Process Set';
+    setStat('Machine','Fanuc 100t','Melt T','230\u00B0C','Mold T','40\u00B0C');
+    moldMat.color.setHex(0xf59e0b); moldMat.emissive.setHex(0x201000);
+}
+function h7(){
+    log('[S07] PINN ready \u2014 click button to start training','sys');
+    document.getElementById('phase-badge').textContent='PINN Ready';
+    showTP('PINN Physics Training');
+    moldMat.color.setHex(0xec4899); moldMat.emissive.setHex(0x200010);
+    drawLoss();
+}
+function triggerPinn(){
+    if(isTraining){clearInterval(trainInt);isTraining=false;document.getElementById('btn-train').textContent='\u26A1 Start PINN Training';return;}
+    isTraining=true;document.getElementById('btn-train').textContent='\u23F9 Stop';
+    log('[PINN] Training Laplace steady-state pressure...','sys');
+    epochCount=0;lossHistory=[];let bL=0.5,pL=0.4;
+    trainInt=setInterval(()=>{
+        epochCount+=5;bL=0.5*Math.exp(-epochCount/80)+Math.random()*0.005;pL=0.4*Math.exp(-epochCount/120)+Math.random()*0.005;
+        const tot=bL+0.1*pL;lossHistory.push({e:epochCount,t:tot,b:bL,p:pL});
+        document.getElementById('loss-badge').textContent=`Loss: ${tot.toFixed(5)}`;drawLoss();
+        FORMULAS[3].val=`loss = ${tot.toFixed(5)}`; buildFormulas(); updateFormulas(7);
+        const lf=Math.min(1,tot/0.5); moldMat.emissive.setHSL((1-lf)*0.3,0.5,0.04+lf*0.04);
+        if(epochCount%40===0) log(`  Ep ${String(epochCount).padStart(3)} | Phys: ${pL.toFixed(5)} | Tot: ${tot.toFixed(5)}`,'info');
+        setTP(Math.min(100,Math.round(epochCount/200*100)));
+        if(epochCount>=200){clearInterval(trainInt);isTraining=false;document.getElementById('btn-train').textContent='\u26A1 Start PINN Training';
+            log('[PINN] \u2705 Converged! PDE compliance: 98.6%','ok');setTimeout(()=>goToStage(8),1200);}
+    },100);
+}
+function h8(){
+    log('[S08] 3D melt filling simulation starting...','sys');
+    document.getElementById('phase-badge').textContent='Filling...';
+    showTP('Melt Front Propagation');
+    setStat('Fill %','0%','Pressure','0 MPa','Weld Lines','--');
+    moldMat.color.setHex(0x2255aa); moldMat.emissive.setHex(0x000000);
+    fillProg=0; clearInterval(fillInt);
+    fillInt=setInterval(()=>{
+        fillProg+=0.015;if(fillProg>=1){fillProg=1;clearInterval(fillInt);
+            log('[S08] \u2705 Fill complete! Clamp: 64.8t','ok');
+            document.getElementById('phase-badge').textContent='Fill Done';
+            setTimeout(()=>goToStage(9),1200);}
+        addFlow(fillProg);
+        const fc=new THREE.Color();fc.setHSL(0.6-fillProg*0.5,0.8,0.4);moldMat.color.copy(fc);moldMat.opacity=0.4+fillProg*0.3;
+        setStat('Fill %',`${(fillProg*100).toFixed(1)}%`,'Pressure',`${(fillProg*78.5).toFixed(1)} MPa`,'Weld Lines','2');
+        setTP(Math.min(100,Math.round(fillProg*100)));
+    },60);
+}
+function h9(){
+    log('[S09] Packing & holding pressure phase...','sys');log('  \u2192 Pack pressure: 60 MPa | Hold time: 5.0s','info');log('  \u2713 Gate seal time: 3.5s [Tait PVT compensated]','ok');
+    document.getElementById('phase-badge').textContent='Packing';
+    setStat('Pack P','60 MPa','Hold','5.0s','Gate Seal','3.5s');
+    moldMat.color.setHex(0xf97316); moldMat.emissive.setHex(0x201000); moldMat.opacity=0.75;
+}
+function h10(){
+    log('[S10] Cooling channel thermal analysis...','sys');log('  \u2713 Coolant: 25\u00B0C water | Flow: 12 L/min','ok');log('  \u2713 Cycle time: 22.4s (cooling: 15.0s = 67%)','ok');
+    document.getElementById('phase-badge').textContent='Cooling';
+    setStat('Coolant','25\u00B0C','Flow','12 L/min','Cycle','22.4s');
+    moldMat.color.setHex(0x14b8a6); moldMat.emissive.setHex(0x001510);
+}
+function h11(){
+    log('[S11] Warpage & shrinkage prediction...','sys');log('  \u2713 Max warpage: 0.32mm | Vol shrinkage: 4.8%','ok');log('  \u2192 Dominant factor: differential cooling (62%)','warn');
+    document.getElementById('phase-badge').textContent='Warpage';
+    setStat('Warpage','0.32mm','Shrinkage','4.8%','Stress','12.4 MPa');
+    moldMat.color.setHex(0xa855f7); moldMat.emissive.setHex(0x150030);
+}
+function h12(){
+    log('[S12] iMolding Digital Twin calibration...','sys');log('  \u2192 Adjust sliders to minimize RMSE','info');
+    document.getElementById('phase-badge').textContent='Calibrating';
+    showTP('RMSE Convergence');
+    moldMat.color.setHex(0x228855); moldMat.emissive.setHex(0x001108); moldMat.opacity=0.7;
+    updateCalib();
+}
+function updateCalib(){
+    const d=parseFloat(document.getElementById('sl-delay').value),v=parseFloat(document.getElementById('sl-visc').value);
+    document.getElementById('lbl-delay').textContent=`${d>0?'+':''}${d.toFixed(2)}s`;
+    document.getElementById('lbl-visc').textContent=`${v>0?'+':''}${v.toFixed(1)}%`;
+    const rmse=Math.sqrt(Math.abs(d-0.18)*320+Math.abs(v-(-3.5))*3.8+1);
+    const el=document.getElementById('rmse-val');el.textContent=`${rmse.toFixed(2)} MPa`;
+    el.style.color=rmse<1.8?'#06d6a0':'#f59e0b';
+    setTP(Math.max(0,Math.round((1-rmse/10)*100)));
+    FORMULAS[4].val=`RMSE = ${rmse.toFixed(2)} MPa`; buildFormulas(); updateFormulas(12);
+    if(rmse<1.8&&!window._cd){log('[S12] \u2705 Calibration complete! RMSE minimized.','ok');window._cd=true;}
+    else if(rmse>=1.8) window._cd=false;
+}
+
+// ─── Init ───────────────────────────────────────────────────
+addEventListener('DOMContentLoaded',()=>{
+    buildStepper(); buildFormulas(); initThree(); animate();
+    goToStage(1); drawLoss();
+    setTimeout(()=>document.getElementById('loader').classList.add('off'),2200);
+    log('[SYS] OpenFlow3D v3.0 Educational Engine initialized','sys');
+    log('[SYS] Three.js r160 | WebGL 2.0 | 12-Stage Workflow','sys');
+    log('[SYS] Click Tutorial Mode in header for guided learning','info');
+});
+addEventListener('resize',()=>drawLoss());
+</script>
+</body>
+</html>

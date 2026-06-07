@@ -1,0 +1,142 @@
+# OpenFlow3D Docker Compose — Multi-Service Orchestration
+# Domain: igs (工業模擬) / aeos (整合開發)
+# Usage: docker-compose up -d
+# Quality Gate QG-1: All services must start within 60 seconds
+
+services:
+  # ─── FastAPI Backend ────────────────────────────
+  api:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: openflow3d-api
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://openflow3d:openflow3d@postgres:5432/openflow3d
+      - REDIS_URL=redis://redis:6379/0
+      - INFLUXDB_URL=http://influxdb:8086
+      - INFLUXDB_TOKEN=${INFLUXDB_TOKEN:-openflow3d-dev-token}
+      - INFLUXDB_ORG=openflow3d
+      - INFLUXDB_BUCKET=sensor_data
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./server:/app
+      - solver_results:/app/results
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    restart: unless-stopped
+    networks:
+      - openflow3d-net
+
+  # ─── Celery Worker ──────────────────────────────
+  worker:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: openflow3d-worker
+    environment:
+      - DATABASE_URL=postgresql://openflow3d:openflow3d@postgres:5432/openflow3d
+      - REDIS_URL=redis://redis:6379/0
+      - INFLUXDB_URL=http://influxdb:8086
+    depends_on:
+      - api
+      - redis
+    volumes:
+      - ./server:/app
+      - solver_results:/app/results
+    command: celery -A tasks worker --loglevel=info --pool=prefork --concurrency=2
+    restart: unless-stopped
+    networks:
+      - openflow3d-net
+
+  # ─── PostgreSQL Database ────────────────────────
+  postgres:
+    image: postgres:17-alpine
+    container_name: openflow3d-postgres
+    environment:
+      POSTGRES_USER: openflow3d
+      POSTGRES_PASSWORD: openflow3d
+      POSTGRES_DB: openflow3d
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U openflow3d"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - openflow3d-net
+
+  # ─── Redis Cache & Message Broker ──────────────
+  redis:
+    image: redis:7-alpine
+    container_name: openflow3d-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - openflow3d-net
+
+  # ─── InfluxDB Time-Series Database ─────────────
+  influxdb:
+    image: influxdb:2.7-alpine
+    container_name: openflow3d-influxdb
+    ports:
+      - "8086:8086"
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: openflow3d
+      DOCKER_INFLUXDB_INIT_PASSWORD: openflow3d-secret
+      DOCKER_INFLUXDB_INIT_ORG: openflow3d
+      DOCKER_INFLUXDB_INIT_BUCKET: sensor_data
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUXDB_TOKEN:-openflow3d-dev-token}
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+    restart: unless-stopped
+    networks:
+      - openflow3d-net
+
+  # ─── Nginx Reverse Proxy ───────────────────────
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: openflow3d-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./client/dist:/usr/share/nginx/html:ro
+    depends_on:
+      - api
+    restart: unless-stopped
+    networks:
+      - openflow3d-net
+
+# ─── Persistent Volumes ──────────────────────────
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  influxdb_data:
+    driver: local
+  solver_results:
+    driver: local
+
+# ─── Network ─────────────────────────────────────
+networks:
+  openflow3d-net:
+    driver: bridge
