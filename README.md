@@ -12,6 +12,10 @@
   <img src="https://img.shields.io/badge/stages-12-purple?style=flat-square" alt="Stages">
 </p>
 
+<p align="center">
+  <a href="https://igsgai25.github.io/OpenFlow3D/igs_openflow3d_interactive_dashboard_20260607_v03.html"><strong>🚀 Launch Live Demo →</strong></a>
+</p>
+
 ---
 
 ## 🎯 What is OpenFlow3D?
@@ -20,74 +24,79 @@ OpenFlow3D is an **open-source, browser-based CAE (Computer-Aided Engineering) e
 
 > **Mission**: Democratize injection molding CAE knowledge through interactive, web-based learning.
 
-## ✨ Key Features
+### ▶️ Live Demo
 
-### 🏭 12-Stage Professional Workflow
-Complete injection molding pipeline covering:
-1. **CAD Geometry Import** — STEP/IGES B-Rep parsing
-2. **Runner & Gate Design** — Sprue/runner/gate placement
-3. **Wasm BLM Mesh Generation** — Gmsh WebAssembly meshing
-4. **Mesh Quality Inspection** — Jacobian/skewness validation
-5. **Material Database (Cross-WLF)** — Polymer viscosity modeling
-6. **Machine & Process Setup** — Injection parameters
-7. **PINN Physics Training** — Neural network PDE constraints
-8. **Melt Filling Analysis** — 3D flow front simulation
-9. **Packing & Holding Pressure** — Tait PVT compensation
-10. **Cooling Channel Analysis** — Conformal cooling optimization
-11. **Warpage & Shrinkage** — Residual stress prediction
-12. **Digital Twin Calibration** — iMolding sensor-sim alignment
+**[🚀 Click here to launch the interactive 3D dashboard](https://igsgai25.github.io/OpenFlow3D/igs_openflow3d_interactive_dashboard_20260607_v03.html)**
 
-### 📖 3 Critical Educational Features
-| Feature | Description |
+Experience the full 12-stage injection molding workflow with 3D visualization, real-time physics equations, and guided tutorials — all running in your browser with zero installation.
+
+---
+
+## ✨ Top 3 Educational Features
+
+### 📖 1. Knowledge Cards — [Learn More](docs/igs_moldex3d_core_simulation_solver_report_20260607_v01.md)
+
+Each of the 12 stages has a dedicated **expandable knowledge card** containing:
+
+| Component | Description |
 |---|---|
-| **Knowledge Cards** | 12 expandable cards with Bloom's Taxonomy levels (L1→L6) and PBL challenges |
-| **Live Formula Dashboard** | 5 governing equations (Cross-WLF, Tait PVT, Fourier, PINN Loss, LM Solver) with real-time parameter binding |
-| **Tutorial Mode** | 7-step guided walkthrough with physics explanations |
+| **Concept Explanation** | 2-3 sentence technical overview of the engineering principle |
+| **Governing Equation** | Key formula rendered in monospace (Cross-WLF, Tait PVT, Fourier, etc.) |
+| **Bloom's Taxonomy Level** | Cognitive level indicator: L1 Remember → L6 Create |
+| **PBL Challenge** | Problem-Based Learning question to test understanding |
 
-### 🎨 3D Visualization
-- **Three.js r160 WebGL** rendering with PBR materials
-- **Real-time 3D model** of injection mold (ExtrudeGeometry + clearcoat)
-- **Particle flow system** with temperature-based HSL coloring
-- **Mouse orbit/zoom** interaction
-- **Stage-specific visual effects** (emissive pulse, color transitions, flow particles)
+> Covers Bloom's Taxonomy from **L1 (Remember)** through **L6 (Create)** across all 12 stages, ensuring progressive cognitive development.
 
-## 🚀 Quick Start
+### 📊 2. Live Formula Dashboard — [Learn More](docs/igs_moldex3d_studio_5w1h_21why_report_20260607_v01.md)
 
-### Option 1: Direct Browser (Zero Install)
-```bash
-# Just open the HTML file in any modern browser
-open igs_openflow3d_interactive_dashboard_20260607_v03.html
-```
+A real-time equation panel showing **5 governing equations** that highlight dynamically based on the active stage:
 
-### Option 2: Local Server
-```bash
-# Python
-python -m http.server 8000
+| # | Formula | Equation | Active Stages |
+|---|---|---|---|
+| 1 | **Cross-WLF** | `η = η₀ / [1 + (η₀·γ̇/τ*)^(1-n)]` | S05, S06, S07, S08, S12 |
+| 2 | **Tait PVT** | `v = v₀·[1 - C·ln(1 + p/B(T))]` | S05, S09, S11 |
+| 3 | **Fourier Energy** | `ρCp·∂T/∂t = k·∇²T + η·γ̇²` | S08, S09, S10 |
+| 4 | **PINN Loss** | `L = L_BC + λ·‖∇²p‖²` | S07 |
+| 5 | **LM Solver** | `(JᵀJ + μI)·δp = -Jᵀr` | S12 |
 
-# Node.js
-npx serve .
-```
+> Parameter values update in real-time during PINN training (loss convergence) and Digital Twin calibration (RMSE optimization).
 
-Then navigate to `http://localhost:8000/igs_openflow3d_interactive_dashboard_20260607_v03.html`
+### 🎓 3. Tutorial Mode — [Learn More](docs/igs_moldex3d_killer_web_cae_blueprint_20260607_v01.md)
 
-## 📁 Project Structure
+A **7-step guided walkthrough** activated via the 🎓 button in the header:
 
-```
-OpenFlow3D/
-├── igs_openflow3d_interactive_dashboard_20260607_v03.html  ← 🌟 Main Dashboard (V3)
-├── igs_openflow3d_interactive_dashboard_20260607_v02.html  ← V2 (Three.js upgrade)
-├── igs_openflow3d_interactive_dashboard_20260607_v01.html  ← V1 (Canvas 2D original)
-├── igs_openflow3d_pinn_melt_front_lab_20260607_v01.py      ← PINN training lab
-├── openflow3d/                                              ← Backend monorepo
-│   ├── server/                                              ← FastAPI backend
-│   ├── solver/                                              ← Physics modules
-│   │   ├── rheology/crosswlf.py                             ← Cross-WLF viscosity
-│   │   └── thermophysical/tait_pvt.py                       ← Tait PVT EOS
-│   ├── docker-compose.yml                                   ← Docker orchestration
-│   └── nginx/                                               ← Reverse proxy config
-├── notes/ & reports/                                        ← Research documentation
-└── README.md                                                ← This file
-```
+| Step | Topic | Key Concept |
+|---|---|---|
+| 1 | Welcome | Platform overview & learning objectives |
+| 2 | Geometry & Runner | CAD B-Rep, Hagen-Poiseuille pressure drop |
+| 3 | Meshing & Quality | BLM boundary layers, Jacobian metrics |
+| 4 | Material & Process | Cross-WLF viscosity, process window |
+| 5 | PINN & Filling | Physics-informed neural networks, melt front |
+| 6 | Packing & Cooling | Tait PVT shrinkage, Biot number |
+| 7 | Warpage & Digital Twin | Residual stress, Levenberg-Marquardt calibration |
+
+> Features glassmorphism modal, progress dots, highlighted technical terms, and embedded equations.
+
+---
+
+## 🏭 12-Stage Professional Workflow
+
+| Zone | Stage | Title | Description |
+|---|---|---|---|
+| **Pre-Processing** | S01 | CAD Geometry Import | STEP/IGES B-Rep parsing & validation |
+| | S02 | Runner & Gate Design | Sprue, runner, gate placement & sizing |
+| | S03 | Wasm BLM Mesh Generation | Gmsh WebAssembly boundary-layer meshing |
+| | S04 | Mesh Quality Inspection | Jacobian, aspect ratio & skewness check |
+| **Setup** | S05 | Material Database (WLF) | Cross-WLF viscosity & Tait PVT loading |
+| | S06 | Machine & Process Setup | Injection pressure, speed & temperature |
+| **Simulation** | S07 | PINN Physics Training | Laplace/N-S equation neural pre-training |
+| | S08 | Melt Filling Analysis | 3D melt front propagation & weld lines |
+| | S09 | Packing & Holding | Post-fill packing pressure & gate seal |
+| | S10 | Cooling Channel Analysis | Conformal cooling efficiency & cycle time |
+| **Post-Processing** | S11 | Warpage & Shrinkage | Residual stress & part deformation prediction |
+| | S12 | Digital Twin Calibration | iMolding sensor-sim curve alignment |
+
+---
 
 ## 🔬 Tech Stack
 
@@ -100,13 +109,42 @@ OpenFlow3D/
 | **Meshing** | Gmsh (WebAssembly) | Client-side BLM mesh generation |
 | **Design** | Nebula Academy Theme | Glassmorphism, particle backgrounds |
 
-## 📊 Version History
+## 📁 Project Structure
 
-| Version | Date | Key Upgrade |
-|---|---|---|
-| **v1.0** | 2026-06-07 | Canvas 2D dashboard, 6-stage workflow |
-| **v2.0** | 2026-06-07 | Three.js WebGL 3D, particle systems, mouse orbit |
-| **v3.0** | 2026-06-07 | 12 stages, Knowledge Cards, Live Formulas, Tutorial Mode |
+```
+OpenFlow3D/
+├── igs_openflow3d_interactive_dashboard_20260607_v03.html  ← 🌟 Main Dashboard (V3)
+├── igs_openflow3d_pinn_melt_front_lab_20260607_v01.py      ← PINN training lab
+├── docs/                                                    ← Research & analysis reports
+│   ├── igs_moldex3d_core_simulation_solver_report.md        ← Solver architecture deep-dive
+│   ├── igs_moldex3d_killer_web_cae_blueprint.md             ← Web-CAE system blueprint
+│   ├── igs_moldex3d_studio_5w1h_21why_report.md             ← 5W1H & 21-Why analysis
+│   ├── igs_moldex3d_twenty_one_why_analysis.md               ← 21-Why deep analysis
+│   ├── igs_moldex3d_top_three_competitors_report.md          ← Market competitor analysis
+│   └── ...                                                  ← Additional reports
+├── openflow3d/                                              ← Backend monorepo
+│   ├── server/                                              ← FastAPI backend
+│   ├── solver/                                              ← Physics modules
+│   │   ├── rheology/crosswlf.py                             ← Cross-WLF viscosity
+│   │   └── thermophysical/tait_pvt.py                       ← Tait PVT EOS
+│   └── docker-compose.yml                                   ← Docker orchestration
+├── flow-3d-papers-docs/                                     ← Literature & papers
+├── LICENSE                                                  ← MIT License
+└── README.md                                                ← This file
+```
+
+## 🚀 Quick Start
+
+### Option 1: Live Demo (Zero Install)
+**[Launch Dashboard →](https://igsgai25.github.io/OpenFlow3D/igs_openflow3d_interactive_dashboard_20260607_v03.html)**
+
+### Option 2: Run Locally
+```bash
+git clone https://github.com/igsgai25/OpenFlow3D.git
+cd OpenFlow3D
+python -m http.server 8000
+# Open http://localhost:8000/igs_openflow3d_interactive_dashboard_20260607_v03.html
+```
 
 ## 👥 Team
 
@@ -120,6 +158,10 @@ OpenFlow3D/
 MIT License — Free for educational and commercial use.
 
 ---
+
+<p align="center">
+  <a href="https://igsgai25.github.io/OpenFlow3D/igs_openflow3d_interactive_dashboard_20260607_v03.html"><strong>🚀 Try the Live Demo Now →</strong></a>
+</p>
 
 <p align="center">
   <strong>Built with 🔥 by iGS & AEOS</strong><br>

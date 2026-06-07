@@ -1,0 +1,277 @@
+{
+  "project": "Flow in 3D - PhD Research",
+  "generated": "2026-06-07",
+  "total_papers": 30,
+  "downloads": [
+    {
+      "id": "paper_01",
+      "arxiv_id": "2306.01776",
+      "title": "From Zero to Turbulence - Generative Modeling for 3D Flow Simulation (ICLR 2024)",
+      "theory": "T1+T5",
+      "filepath": "d:\\L3-Academy\\NCTU-Zack\\flow-3d-papers-docs\\downloads\\paper_01_2306.01776.pdf",
+      "status": "downloaded",
+      "url": "https://arxiv.org/abs/2306.01776"
+    },
+    {
+      "id": "paper_02",
+      "arxiv_id": "2507.08972",
+      "title": "Simulating 3D Turbulence with Physics-informed Neural Networks",
+      "theory": "T1+T5",
+      "filepath": "d:\\L3-Academy\\NCTU-Zack\\flow-3d-papers-docs\\downloads\\paper_02_2507.08972.pdf",
+      "status": "downloaded",
+      "url": "https://arxiv.org/abs/2507.08972"
+    },
+    {
+      "id": "paper_03",
+      "arxiv_id": "2210.07191",
+      "title": "Stable nearly self-similar blowup of 2D Boussinesq and 3D Euler equations",
+      "theory": "T1",
+      "filepath": "d:\\L3-Academy\\NCTU-Zack\\flow-3d-papers-docs\\downloads\\paper_03_2210.07191.pdf",
+      "status": "downloaded",
+      "url": "https://arxiv.org/abs/2210.07191"
+    },
+    {
+      "id": "paper_04",
+      "arxiv_id": "2510.11220",
+      "title": "A paradox concerning numerical simulation of Navier-Stokes turbulence",
+      "theory": "T1",
+      "filepath": "d:\\L3-Academy\\NCTU-Zack\\flow-3d-papers-docs\\downloads\\paper_04_2510.11220.pdf",
+      "status": "downloaded",
+      "url": "https://arxiv.org/abs/2510.11220"
+    },
+    {
+      "id": "paper_05",
+      "arxiv_id": "2509.08972",
+      "title": "Discovery of Unstable Singularities in 3D Euler-NS equations",
+      "theory": "T1",
+      "filepath": "d:\\L3-Academy\\NCTU-Zack\\flow-3d-papers-docs\\downloads\\paper_05_2509.08972.pdf",
+      "status": "downloaded",
+      "url": "https://arxiv.org/abs/2509.08972"
+    },
+    {
+      "id": "paper_06",
+      "arxiv_id": "2012.12758",
+      "title": "A review of Volume of Fluid methods for interface-resolving simulations",
+      "theory": "T2",
+      "filepath": "d:\\L3-Academy\\NCTU-Zack\\flow-3d-papers-docs\\downloads\\paper_06_2012.12758.pdf",
+      "status": "downloaded",
+      "url": "https://arxiv.org/abs/2012.12758"
+    },
+    {
+      "id": "paper_07",
+      "arxiv_id": "1811.12327",
+      "title": "A coupled VOF-Level Set method for 3D unstructured meshes",
+      "theory": "T2",
+      "filepath": "d:\\L3-Academy\\NCTU-Zack\\flow-3d-papers-docs\\downloads\\paper_07_1811.12327.pdf",
+      "status": "downloaded",
+      "url": "https://arxiv.org/abs/1811.12327"
+    },
+    {
+      "id": "paper_08",
+      "arxiv_id": "2102.11403",
+      "title": "Computational modeling of multiphase flows with surface tension",
+      "theory": "T2",
+      "filepath": "d:\\L3-Academy\\NCTU-Zack\\flow-3d-papers-docs\\downloads\\paper_08_2102.11403.pdf",
+      "status": "downloaded",
+      "url": "https://arxiv.org/abs/2102.11403"
+    },
+    {
+      "id": "paper_09",
+      "arxiv_id": "2301.12319",
+      "title": "Machine learning for turbulence modeling and simulation advances in CFD",
+      "theory": "T3",
+      "filepath": "d:\\L3-Academy\\NCTU-Zack\\flow-3d-papers-docs\\downloads\\paper_09_2301.12319.pdf",
+      "status": "downloaded",
+      "url": "https://arxiv.org/abs/2301.12319"
+    },
+    {
+      "id": "paper_10",
+      "arxiv_id": "2105.02679",
+      "title": "Machine learning accelerated computational fluid dynamics",
+      "theory": "T3+T5",
+      "filepath": "d:\\L3-Academy\\NCTU-Zack\\flow-3d-papers-docs\\downloads\\paper_10_2105.02679.pdf",
+      "status": "downloaded",
+      "url": "https://arxiv.org/abs/2105.02679"
+    },
+    {
+      "id": "paper_11",
+      "arxiv_id": "1906.02382",
+      "title": "Turbulence modeling in the age of data - comprehensive review",
+      "theory": "T3+T5",
+      "filepath": "d:\\L3-Academy\\NCTU-Zack\\flow-3d-papers-docs\\downloads\\paper_11_1906.02382.pdf",
+      "status": "downloaded",
+      "url": "https://arxiv.org/abs/1906.02382"
+    },
+    {
+      "id": "paper_12",
+      "arxiv_id": "2004.05477",
+      "title": "Learned discretizations for passive scalar advection in 2D turbulent flow",
+      "theory": "T3+T5",
+      "filepath": "d:\\L3-Academy\\NCTU-Zack\\flow-3d-papers-docs\\downloads\\paper_12_2004.05477.pdf",
+      "status": "downloaded",
+      "url": "https://arxiv.org/abs/2004.05477"
+    },
+    {
+      "id": "paper_13",
+      "arxiv_id": "1710.07313",
+      "title": "Physics-informed machine learning for Reynolds stress modeling",
+      "theory": "T3+T5",
+      "filepath": "d:\\L3-Academy\\NCTU-Zack\\flow-3d-papers-docs\\downloads\\paper_13_1710.07313.pdf",
+      "status": "downloaded",
+      "url": "https://arxiv.org/abs/1710.07313"
+    },
+    {
+      "id": "paper_14",
+      "arxiv_id": "2106.12218",
+      "title": "Grand challenges for SPH in computational fluid dynamics",
+      "theory": "T4",
+      "filepath": "d:\\L3-Academy\\NCTU-Zack\\flow-3d-papers-docs\\downloads\\paper_14_2106.12218.pdf",
+      "status": "downloaded",
+      "url": "https://arxiv.org/abs/2106.12218"
+    },
+    {
+      "id": "paper_15",
+      "arxiv_id": "2305.14514",
+      "title": "Semi-Lagrangian Meshfree Lattice Boltzmann Method",
+      "theory": "T4",
+      "filepath": "d:\\L3-Academy\\NCTU-Zack\\flow-3d-papers-docs\\downloads\\paper_15_2305.14514.pdf",
+      "status": "downloaded",
+      "url": "https://arxiv.org/abs/2305.14514"
+    },
+    {
+      "id": "paper_16",
+      "arxiv_id": "2010.11929",
+      "title": "Review of Lattice Boltzmann methods for multiphase flow",
+      "theory": "T4",
+      "filepath": "d:\\L3-Academy\\NCTU-Zack\\flow-3d-papers-docs\\downloads\\paper_16_2010.11929.pdf",
+      "status": "downloaded",
+      "url": "https://arxiv.org/abs/2010.11929"
+    },
+    {
+      "id": "paper_17",
+      "arxiv_id": "2502.17512",
+      "title": "Learning multi-phase flow in fractured porous media with GNN",
+      "theory": "T4+T5",
+      "filepath": "d:\\L3-Academy\\NCTU-Zack\\flow-3d-papers-docs\\downloads\\paper_17_2502.17512.pdf",
+      "status": "downloaded",
+      "url": "https://arxiv.org/abs/2502.17512"
+    },
+    {
+      "id": "paper_18",
+      "arxiv_id": "1711.10561",
+      "title": "Physics-informed neural networks (PINNs) - original paper by Raissi et al.",
+      "theory": "T5",
+      "filepath": "d:\\L3-Academy\\NCTU-Zack\\flow-3d-papers-docs\\downloads\\paper_18_1711.10561.pdf",
+      "status": "downloaded",
+      "url": "https://arxiv.org/abs/1711.10561"
+    },
+    {
+      "id": "paper_19",
+      "arxiv_id": "2010.08895",
+      "title": "Fourier Neural Operator for parametric PDEs (FNO)",
+      "theory": "T5",
+      "filepath": "d:\\L3-Academy\\NCTU-Zack\\flow-3d-papers-docs\\downloads\\paper_19_2010.08895.pdf",
+      "status": "downloaded",
+      "url": "https://arxiv.org/abs/2010.08895"
+    },
+    {
+      "id": "paper_20",
+      "arxiv_id": "1910.03193",
+      "title": "DeepONet - learning nonlinear operators",
+      "theory": "T5",
+      "filepath": "d:\\L3-Academy\\NCTU-Zack\\flow-3d-papers-docs\\downloads\\paper_20_1910.03193.pdf",
+      "status": "downloaded",
+      "url": "https://arxiv.org/abs/1910.03193"
+    },
+    {
+      "id": "paper_21",
+      "arxiv_id": "2202.11214",
+      "title": "FourCastNet - global weather forecasting with adaptive FNO",
+      "theory": "T5",
+      "filepath": "d:\\L3-Academy\\NCTU-Zack\\flow-3d-papers-docs\\downloads\\paper_21_2202.11214.pdf",
+      "status": "downloaded",
+      "url": "https://arxiv.org/abs/2202.11214"
+    },
+    {
+      "id": "paper_22",
+      "arxiv_id": "2010.03957",
+      "title": "Learning mesh-based simulation with graph networks (MeshGraphNets)",
+      "theory": "T5",
+      "filepath": "d:\\L3-Academy\\NCTU-Zack\\flow-3d-papers-docs\\downloads\\paper_22_2010.03957.pdf",
+      "status": "downloaded",
+      "url": "https://arxiv.org/abs/2010.03957"
+    },
+    {
+      "id": "paper_23",
+      "arxiv_id": "2002.07514",
+      "title": "Learning to simulate complex physics with graph networks (GNS)",
+      "theory": "T5",
+      "filepath": "d:\\L3-Academy\\NCTU-Zack\\flow-3d-papers-docs\\downloads\\paper_23_2002.07514.pdf",
+      "status": "downloaded",
+      "url": "https://arxiv.org/abs/2002.07514"
+    },
+    {
+      "id": "paper_24",
+      "arxiv_id": "1806.01261",
+      "title": "Relational inductive biases, deep learning, and graph networks",
+      "theory": "T5",
+      "filepath": "d:\\L3-Academy\\NCTU-Zack\\flow-3d-papers-docs\\downloads\\paper_24_1806.01261.pdf",
+      "status": "downloaded",
+      "url": "https://arxiv.org/abs/1806.01261"
+    },
+    {
+      "id": "paper_25",
+      "arxiv_id": "2209.15616",
+      "title": "Towards multi-spatiotemporal-scale generalized PDE modeling",
+      "theory": "T5",
+      "filepath": "d:\\L3-Academy\\NCTU-Zack\\flow-3d-papers-docs\\downloads\\paper_25_2209.15616.pdf",
+      "status": "downloaded",
+      "url": "https://arxiv.org/abs/2209.15616"
+    },
+    {
+      "id": "paper_26",
+      "arxiv_id": "2310.02994",
+      "title": "Multiple physics pretraining for physical surrogate models",
+      "theory": "T5",
+      "filepath": "d:\\L3-Academy\\NCTU-Zack\\flow-3d-papers-docs\\downloads\\paper_26_2310.02994.pdf",
+      "status": "downloaded",
+      "url": "https://arxiv.org/abs/2310.02994"
+    },
+    {
+      "id": "paper_27",
+      "arxiv_id": "2405.19101",
+      "title": "Poseidon - efficient foundation models for PDEs",
+      "theory": "T5",
+      "filepath": "d:\\L3-Academy\\NCTU-Zack\\flow-3d-papers-docs\\downloads\\paper_27_2405.19101.pdf",
+      "status": "downloaded",
+      "url": "https://arxiv.org/abs/2405.19101"
+    },
+    {
+      "id": "paper_28",
+      "arxiv_id": "2306.00258",
+      "title": "Neural operator survey - learning maps between function spaces",
+      "theory": "T5",
+      "filepath": "d:\\L3-Academy\\NCTU-Zack\\flow-3d-papers-docs\\downloads\\paper_28_2306.00258.pdf",
+      "status": "downloaded",
+      "url": "https://arxiv.org/abs/2306.00258"
+    },
+    {
+      "id": "paper_29",
+      "arxiv_id": "2111.05512",
+      "title": "Physics-informed machine learning - Nature Reviews Physics",
+      "theory": "T5",
+      "filepath": "d:\\L3-Academy\\NCTU-Zack\\flow-3d-papers-docs\\downloads\\paper_29_2111.05512.pdf",
+      "status": "downloaded",
+      "url": "https://arxiv.org/abs/2111.05512"
+    },
+    {
+      "id": "paper_30",
+      "arxiv_id": "2209.12605",
+      "title": "Recent advances in machine learning for computational fluid dynamics survey",
+      "theory": "T5",
+      "filepath": "d:\\L3-Academy\\NCTU-Zack\\flow-3d-papers-docs\\downloads\\paper_30_2209.12605.pdf",
+      "status": "downloaded",
+      "url": "https://arxiv.org/abs/2209.12605"
+    }
+  ]
+}
